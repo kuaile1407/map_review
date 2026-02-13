@@ -1,22 +1,22 @@
 # MCU 内存分析报告
 
-生成时间: 2026-02-10 19:39:13
+生成时间: 2026-02-13 19:36:22
 
 ## 1. 内存使用概览
 
 | 内存类型 | 已使用 | 最大值 | 使用率 |
 |---------|--------|--------|--------|
-| Flash (ROM) | 468.3 KB | 1.0 MB | 45.7% |
-| SRAM (RAM) | 143.3 KB | 256.0 KB | 56.0% |
+| Flash (ROM) | 471.1 KB | 1.0 MB | 46.0% |
+| SRAM (RAM) | 143.4 KB | 256.0 KB | 56.0% |
 
 ## 2. 详细分布
 
 | 段 | 大小 |
 |----|------|
-| Code | 396.0 KB |
-| RO Data | 68.2 KB |
-| RW Data | 4.1 KB |
-| ZI Data | 139.2 KB |
+| Code | 398.4 KB |
+| RO Data | 68.5 KB |
+| RW Data | 4.2 KB |
+| ZI Data | 139.3 KB |
 | Heap | 32.0 KB |
 | Stack | 24.6 KB |
 
@@ -24,16 +24,16 @@
 
 | 段名 | 大小 |
 |------|------|
-| text | 393.8 KB |
+| text | 396.2 KB |
 | noinit | 92.3 KB |
-| rodata | 67.6 KB |
-| bss | 44.0 KB |
-| datas | 4.1 KB |
+| rodata | 67.8 KB |
+| bss | 44.1 KB |
+| datas | 4.2 KB |
 | sw_isr_table | 2.1 KB |
 | rom_start | 1.1 KB |
+| device_area | 720.0 B |
 | log_const_area | 712.0 B |
-| device_area | 684.0 B |
-| initlevel | 328.0 B |
+| initlevel | 336.0 B |
 
 ## 4. 模块统计 (Top 10)
 
@@ -47,5 +47,5 @@
 | at/libmpsl.a(libmpsl_debug_hardfp__obfuscated.elf) | 14.3 KB | 1.8 KB |
 | rt/libsubsys__mgmt__mcumgr__transport.a(smp.c.obj) | 665.0 B | 14.6 KB |
 | tooth/host/libsubsys__bluetooth__host.a(att.c.obj) | 11.0 KB | 3.6 KB |
+| tooth/host/libsubsys__bluetooth__host.a(smp.c.obj) | 12.8 KB | 796.0 B |
 | ooth/host/libsubsys__bluetooth__host.a(gatt.c.obj) | 11.7 KB | 306.0 B |
-| zephyr/kernel/libkernel.a(init.c.obj) | 926.0 B | 10.8 KB |
