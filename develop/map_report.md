@@ -1,21 +1,21 @@
 # MCU 内存分析报告
 
-生成时间: 2026-02-13 19:45:01
+生成时间: 2026-02-20 17:11:43
 
 ## 1. 内存使用概览
 
 | 内存类型 | 已使用 | 最大值 | 使用率 |
 |---------|--------|--------|--------|
-| Flash (ROM) | 471.1 KB | 1.0 MB | 46.0% |
-| SRAM (RAM) | 143.4 KB | 256.0 KB | 56.0% |
+| Flash (ROM) | 474.7 KB | 1.0 MB | 46.4% |
+| SRAM (RAM) | 144.6 KB | 256.0 KB | 56.5% |
 
 ## 2. 详细分布
 
 | 段 | 大小 |
 |----|------|
-| Code | 398.4 KB |
-| RO Data | 68.5 KB |
-| RW Data | 4.2 KB |
+| Code | 400.8 KB |
+| RO Data | 68.6 KB |
+| RW Data | 5.3 KB |
 | ZI Data | 139.3 KB |
 | Heap | 32.0 KB |
 | Stack | 24.6 KB |
@@ -24,15 +24,15 @@
 
 | 段名 | 大小 |
 |------|------|
-| text | 396.2 KB |
+| text | 398.7 KB |
 | noinit | 92.3 KB |
-| rodata | 67.8 KB |
+| rodata | 67.9 KB |
 | bss | 44.1 KB |
-| datas | 4.2 KB |
+| datas | 5.3 KB |
 | sw_isr_table | 2.1 KB |
 | rom_start | 1.1 KB |
 | device_area | 720.0 B |
-| log_const_area | 712.0 B |
+| log_const_area | 720.0 B |
 | initlevel | 336.0 B |
 
 ## 4. 模块统计 (Top 10)
