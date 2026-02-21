@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 410428,
-    "ro": 70236,
+    "code": 410552,
+    "ro": 70308,
     "rw": 5417,
-    "zi": 142622,
+    "zi": 143178,
     "heap": 32812,
     "stack": 25144
   },
-  "total_rom": 486081,
-  "total_ram": 148039,
+  "total_rom": 486277,
+  "total_ram": 148595,
   "symbols": [
     {
       "name": "rom_start",
@@ -7138,7 +7138,7 @@
     },
     {
       "name": "text",
-      "size": 152,
+      "size": 124,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -7173,7 +7173,7 @@
     },
     {
       "name": "text",
-      "size": 196,
+      "size": 180,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -7264,7 +7264,7 @@
     },
     {
       "name": "text",
-      "size": 212,
+      "size": 228,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7279,6 +7279,13 @@
     {
       "name": "text",
       "size": 196,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 40,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7313,7 +7320,7 @@
     },
     {
       "name": "text",
-      "size": 108,
+      "size": 120,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -7327,13 +7334,6 @@
     },
     {
       "name": "text",
-      "size": 176,
-      "section": "text",
-      "object": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 368,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
@@ -7341,7 +7341,14 @@
     },
     {
       "name": "text",
-      "size": 36,
+      "size": 176,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble_gatt.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 40,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -7460,6 +7467,13 @@
     },
     {
       "name": "text",
+      "size": 36,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 144,
       "section": "text",
       "object": "app/libapp.a(ble_protocol.c.obj)",
@@ -7467,7 +7481,35 @@
     },
     {
       "name": "text",
-      "size": 328,
+      "size": 68,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 60,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 212,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 16,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 292,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -18919,7 +18961,7 @@
     },
     {
       "name": "text",
-      "size": 34,
+      "size": 24,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -18927,6 +18969,13 @@
     {
       "name": "text",
       "size": 36,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble_gatt.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 8,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -18968,7 +19017,7 @@
     },
     {
       "name": "text",
-      "size": 568,
+      "size": 310,
       "section": "text",
       "object": "app/libapp.a(ble_protocol.c.obj)",
       "category": "rom"
@@ -30294,7 +30343,7 @@
     },
     {
       "name": "rodata",
-      "size": 172,
+      "size": 144,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -30624,6 +30673,20 @@
     {
       "name": "rodata",
       "size": 103,
+      "section": "rodata",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 40,
+      "section": "rodata",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 60,
       "section": "rodata",
       "object": "app/libapp.a(ble_protocol.c.obj)",
       "category": "rom"
@@ -40303,6 +40366,13 @@
       "category": "ram"
     },
     {
+      "name": "bss",
+      "size": 48,
+      "section": "bss",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "ram"
+    },
+    {
       "name": "bss.cmd_ctx",
       "size": 824,
       "section": "bss",
@@ -40598,7 +40668,7 @@
     },
     {
       "name": "bss",
-      "size": 80,
+      "size": 44,
       "section": "bss",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "ram"
@@ -40608,6 +40678,13 @@
       "size": 12,
       "section": "bss",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss.agg_ctx",
+      "size": 544,
+      "section": "bss",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
       "category": "ram"
     },
     {
@@ -42517,18 +42594,18 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 1671,
+      "rom": 1599,
       "ram": 76
     },
     "app/libapp.a(svc_ble.c.obj)": {
       "name": "app/libapp.a(svc_ble.c.obj)",
-      "rom": 2986,
-      "ram": 62
+      "rom": 3032,
+      "ram": 110
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2010,
-      "ram": 290
+      "rom": 2034,
+      "ram": 254
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
       "name": "app/libapp.a(svc_ble_cmd.c.obj)",
@@ -42542,12 +42619,12 @@
     },
     "app/libapp.a(ble_protocol.c.obj)": {
       "name": "app/libapp.a(ble_protocol.c.obj)",
-      "rom": 1043,
-      "ram": 0
+      "rom": 1277,
+      "ram": 544
     },
     "app/libapp.a(svc_sensor.c.obj)": {
       "name": "app/libapp.a(svc_sensor.c.obj)",
-      "rom": 1990,
+      "rom": 1954,
       "ram": 2404
     },
     "app/libapp.a(svc_storage.c.obj)": {
@@ -44083,7 +44160,7 @@
     },
     "text": {
       "name": "text",
-      "size": 408220
+      "size": 408344
     },
     "initlevel": {
       "name": "initlevel",
@@ -44099,7 +44176,7 @@
     },
     "rodata": {
       "name": "rodata",
-      "size": 69516
+      "size": 69588
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -44147,7 +44224,7 @@
     },
     "bss": {
       "name": "bss",
-      "size": 45164
+      "size": 45720
     },
     "noinit": {
       "name": "noinit",
