@@ -1,13 +1,13 @@
 {
   "stats": {
-    "code": 301116,
+    "code": 301120,
     "ro": 43300,
     "rw": 5030,
     "zi": 147937,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349446,
+  "total_rom": 349450,
   "total_ram": 152967,
   "symbols": [
     {
@@ -7404,7 +7404,7 @@
     },
     {
       "name": "text",
-      "size": 284,
+      "size": 288,
       "section": "text",
       "object": "app/libapp.a(drv_baro.c.obj)",
       "category": "rom"
@@ -32798,7 +32798,7 @@
     },
     "app/libapp.a(drv_baro.c.obj)": {
       "name": "app/libapp.a(drv_baro.c.obj)",
-      "rom": 1107,
+      "rom": 1111,
       "ram": 16
     },
     "app/libapp.a(drv_led.c.obj)": {
@@ -33919,7 +33919,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298924
+      "size": 298928
     },
     "initlevel": {
       "name": "initlevel",
