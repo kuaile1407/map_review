@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 324232,
-    "ro": 46780,
-    "rw": 5038,
-    "zi": 137676,
+    "code": 301116,
+    "ro": 43300,
+    "rw": 5030,
+    "zi": 147937,
     "heap": 32812,
-    "stack": 25144
+    "stack": 28216
   },
-  "total_rom": 376050,
-  "total_ram": 142714,
+  "total_rom": 349446,
+  "total_ram": 152967,
   "symbols": [
     {
       "name": "rom_start",
@@ -6557,13 +6557,6 @@
     },
     {
       "name": "text",
-      "size": 38,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_popcountsi2.o)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 668,
       "section": "text",
       "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_udivmoddi4.o)",
@@ -6795,7 +6788,7 @@
     },
     {
       "name": "text",
-      "size": 180,
+      "size": 244,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -6935,14 +6928,14 @@
     },
     {
       "name": "text",
-      "size": 224,
+      "size": 220,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 120,
+      "size": 116,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -6956,7 +6949,7 @@
     },
     {
       "name": "text",
-      "size": 368,
+      "size": 360,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -7054,7 +7047,7 @@
     },
     {
       "name": "text",
-      "size": 196,
+      "size": 216,
       "section": "text",
       "object": "app/libapp.a(svc_ble_status.c.obj)",
       "category": "rom"
@@ -7138,7 +7131,7 @@
     },
     {
       "name": "text",
-      "size": 332,
+      "size": 504,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -7208,6 +7201,20 @@
     },
     {
       "name": "text",
+      "size": 32,
+      "section": "text",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 104,
+      "section": "text",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 108,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
@@ -7215,42 +7222,35 @@
     },
     {
       "name": "text",
-      "size": 40,
+      "size": 688,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 24,
+      "size": 652,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 352,
+      "size": 524,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 164,
+      "size": 460,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 140,
-      "section": "text",
-      "object": "app/libapp.a(svc_storage.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 76,
+      "size": 764,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
@@ -7414,13 +7414,6 @@
       "size": 64,
       "section": "text",
       "object": "app/libapp.a(drv_baro.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 84,
-      "section": "text",
-      "object": "app/libapp.a(drv_nand.c.obj)",
       "category": "rom"
     },
     {
@@ -7701,6 +7694,27 @@
       "size": 88,
       "section": "text",
       "object": "zephyr/libzephyr.a(notify.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 104,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 112,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 132,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
       "category": "rom"
     },
     {
@@ -8863,167 +8877,6 @@
       "size": 36,
       "section": "text",
       "object": "zephyr/soc/soc/nrf54l15/libsoc__nordic.a(reboot.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 48,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 44,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 164,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text.fs_open",
-      "size": 296,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 60,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 56,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 140,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text.fs_stat",
-      "size": 136,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 60,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 28,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs_impl.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 16,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 232,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 252,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 48,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 56,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 988,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 228,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 404,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 56,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 104,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 40,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 20,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 156,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "rom"
     },
     {
@@ -11632,6 +11485,20 @@
     },
     {
       "name": "text",
+      "size": 60,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 68,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 48,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
@@ -11646,13 +11513,6 @@
     },
     {
       "name": "text",
-      "size": 60,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 88,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
@@ -11660,14 +11520,7 @@
     },
     {
       "name": "text",
-      "size": 68,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 120,
+      "size": 288,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
       "category": "rom"
@@ -11688,6 +11541,20 @@
     },
     {
       "name": "text",
+      "size": 84,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 84,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 416,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
@@ -11695,42 +11562,49 @@
     },
     {
       "name": "text",
-      "size": 84,
+      "size": 508,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 84,
+      "size": 288,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 480,
+      "size": 304,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 188,
+      "size": 756,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 640,
+      "size": 664,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 32,
+      "size": 324,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 184,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -12549,7 +12423,7 @@
     },
     {
       "name": "text",
-      "size": 20,
+      "size": 156,
       "section": "text",
       "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
       "category": "rom"
@@ -12563,7 +12437,7 @@
     },
     {
       "name": "text",
-      "size": 424,
+      "size": 580,
       "section": "text",
       "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
       "category": "rom"
@@ -13493,405 +13367,6 @@
       "category": "rom"
     },
     {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 124,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 84,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 88,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 120,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 252,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 500,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 360,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 824,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 204,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 276,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 68,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 264,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 1536,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 148,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 392,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 84,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 356,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 260,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 84,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 188,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 300,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 32,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 148,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 504,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 888,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 744,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 924,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 924,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 428,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 108,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 136,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 1340,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 256,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 1856,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 384,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 304,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 144,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 40,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 24,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 772,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 616,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 360,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 148,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 184,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 80,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 68,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 68,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text.lfs_crc",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(zephyr_lfs_crc.c.obj)",
-      "category": "rom"
-    },
-    {
       "name": "text._DoInit",
       "size": 100,
       "section": "text",
@@ -14047,21 +13522,7 @@
     },
     {
       "name": "text",
-      "size": 364,
-      "section": "text",
-      "object": "zephyr/kernel/libkernel.a(kheap.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 88,
-      "section": "text",
-      "object": "zephyr/kernel/libkernel.a(kheap.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 28,
       "section": "text",
       "object": "zephyr/kernel/libkernel.a(kheap.c.obj)",
       "category": "rom"
@@ -15453,13 +14914,6 @@
       "category": "rom"
     },
     {
-      "name": "text.free",
-      "size": 16,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-malloc.o)",
-      "category": "rom"
-    },
-    {
       "name": "text._free_r",
       "size": 148,
       "section": "text",
@@ -15629,13 +15083,6 @@
     },
     {
       "name": "text",
-      "size": 36,
-      "section": "text",
-      "object": "app/libapp.a(svc_ble_status.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 64,
       "section": "text",
       "object": "app/libapp.a(ble_protocol.c.obj)",
@@ -15671,7 +15118,14 @@
     },
     {
       "name": "text",
-      "size": 30,
+      "size": 18,
+      "section": "text",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 60,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
@@ -16122,6 +15576,34 @@
       "size": 62,
       "section": "text",
       "object": "zephyr/libzephyr.a(notify.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 66,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 38,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 36,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 64,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
       "category": "rom"
     },
     {
@@ -16976,174 +16458,6 @@
       "size": 6,
       "section": "text",
       "object": "zephyr/soc/soc/nrf54l15/libsoc__nordic.a(reboot.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 16,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 118,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 104,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 4,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 28,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 54,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text.fs_lock",
-      "size": 20,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 86,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 44,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 74,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 50,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 50,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 20,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 26,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 26,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 48,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 42,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 46,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 38,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 56,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 50,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 50,
-      "section": "text",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "rom"
     },
     {
@@ -19486,6 +18800,13 @@
     },
     {
       "name": "text",
+      "size": 4,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 12,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
@@ -19494,6 +18815,13 @@
     {
       "name": "text",
       "size": 12,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 22,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -19514,7 +18842,7 @@
     },
     {
       "name": "text",
-      "size": 68,
+      "size": 130,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -19522,6 +18850,20 @@
     {
       "name": "text",
       "size": 36,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 24,
+      "section": "text",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 40,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -19549,14 +18891,7 @@
     },
     {
       "name": "text",
-      "size": 342,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 234,
+      "size": 226,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -19577,49 +18912,7 @@
     },
     {
       "name": "text",
-      "size": 140,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 60,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 114,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 148,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 26,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 54,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 22,
+      "size": 66,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -19627,13 +18920,6 @@
     {
       "name": "text",
       "size": 28,
-      "section": "text",
-      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 34,
       "section": "text",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -21621,391 +20907,6 @@
     },
     {
       "name": "text",
-      "size": 72,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 58,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 24,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 22,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 10,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 10,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 6,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 14,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 54,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 28,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 40,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 10,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 4,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 24,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 14,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 10,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 24,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 60,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 26,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 152,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 80,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 290,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 112,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 66,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 146,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 100,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 28,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 140,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 34,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 350,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 350,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 242,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 142,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 64,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 186,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 16,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 132,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 26,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 40,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 212,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 50,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 38,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 70,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 8,
-      "section": "text",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 24,
       "section": "text",
       "object": "modules/segger/libmodules__segger.a(SEGGER_RTT.c.obj)",
@@ -23615,38 +22516,10 @@
       "category": "rom"
     },
     {
-      "name": "text.strchr",
-      "size": 26,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strchr.o)",
-      "category": "rom"
-    },
-    {
-      "name": "text.strcspn",
-      "size": 34,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strcspn.o)",
-      "category": "rom"
-    },
-    {
-      "name": "text.strncmp",
-      "size": 36,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncmp.o)",
-      "category": "rom"
-    },
-    {
       "name": "text.strncpy",
       "size": 38,
       "section": "text",
       "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncpy.o)",
-      "category": "rom"
-    },
-    {
-      "name": "text.strspn",
-      "size": 32,
-      "section": "text",
-      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strspn.o)",
       "category": "rom"
     },
     {
@@ -23962,13 +22835,6 @@
       "size": 8,
       "section": "initlevel",
       "object": "zephyr/drivers/sensor/st/lsm9ds1_mag/libdrivers__sensor__st__lsm9ds1_mag.a(lsm9ds1_mag.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "initlevel",
-      "size": 8,
-      "section": "initlevel",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "rom"
     },
     {
@@ -24493,13 +23359,6 @@
       "name": "log_const_area",
       "size": 8,
       "section": "log_const_area",
-      "object": "app/libapp.a(drv_nand.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "log_const_area",
-      "size": 8,
-      "section": "log_const_area",
       "object": "app/libapp.a(events.c.obj)",
       "category": "rom"
     },
@@ -24535,13 +23394,6 @@
       "name": "log_const_area",
       "size": 8,
       "section": "log_const_area",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "log_const_area",
-      "size": 8,
-      "section": "log_const_area",
       "object": "zephyr/drivers/i2c/libdrivers__i2c.a(i2c_common.c.obj)",
       "category": "rom"
     },
@@ -24564,13 +23416,6 @@
       "size": 8,
       "section": "log_const_area",
       "object": "zephyr/drivers/led/libdrivers__led.a(led_pwm.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "log_const_area",
-      "size": 8,
-      "section": "log_const_area",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "rom"
     },
     {
@@ -24893,13 +23738,6 @@
       "size": 16,
       "section": "rodata",
       "object": "modules/hal_nordic/modules/hal_nordic/nrfx/libmodules__hal_nordic__nrfx.a(nrfx_saadc.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 24,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
       "category": "rom"
     },
     {
@@ -25478,35 +24316,49 @@
     },
     {
       "name": "rodata",
-      "size": 17,
+      "size": 32,
       "section": "rodata",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 21,
+      "size": 48,
       "section": "rodata",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 264,
+      "size": 147,
       "section": "rodata",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 96,
+      "size": 266,
       "section": "rodata",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 30,
+      "size": 84,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 243,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 52,
       "section": "rodata",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
@@ -25656,20 +24508,6 @@
       "size": 9,
       "section": "rodata",
       "object": "app/libapp.a(drv_baro.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 52,
-      "section": "rodata",
-      "object": "app/libapp.a(drv_nand.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 9,
-      "section": "rodata",
-      "object": "app/libapp.a(drv_nand.c.obj)",
       "category": "rom"
     },
     {
@@ -25845,6 +24683,20 @@
       "size": 38,
       "section": "rodata",
       "object": "zephyr/libzephyr.a(notify.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 43,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 20,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(ring_buffer.c.obj)",
       "category": "rom"
     },
     {
@@ -26227,7 +25079,7 @@
     },
     {
       "name": "rodata",
-      "size": 144,
+      "size": 128,
       "section": "rodata",
       "object": "zephyr/libzephyr.a(flash_map_partition_manager.c.obj)",
       "category": "rom"
@@ -26528,118 +25380,6 @@
     },
     {
       "name": "rodata",
-      "size": 176,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 22,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 22,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 58,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 32,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 61,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 3,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 2,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs_impl.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 13,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 63,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 61,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 552,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 43,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 143,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 72,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 9,
-      "section": "rodata",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
       "size": 92,
       "section": "rodata",
       "object": "zephyr/subsys/mgmt/mcumgr/mgmt/libsubsys__mgmt__mcumgr__mgmt.a(mgmt.c.obj)",
@@ -26766,7 +25506,7 @@
     },
     {
       "name": "rodata",
-      "size": 66,
+      "size": 58,
       "section": "rodata",
       "object": "zephyr/subsys/mgmt/mcumgr/grp/img_mgmt/libsubsys__mgmt__mcumgr__grp__img_mgmt.a(img_mgmt_state.c.obj)",
       "category": "rom"
@@ -28488,6 +27228,20 @@
     },
     {
       "name": "rodata",
+      "size": 18,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 10,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
       "size": 8,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
@@ -28509,49 +27263,105 @@
     },
     {
       "name": "rodata",
-      "size": 882,
+      "size": 134,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 93,
+      "size": 748,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 43,
+      "size": 29,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 316,
+      "size": 35,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 24,
+      "size": 134,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 64,
+      "size": 101,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 64,
+      "size": 140,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 176,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 120,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 19,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 25,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 20,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 14,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 20,
+      "section": "rodata",
+      "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 48,
       "section": "rodata",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "rom"
@@ -29405,7 +28215,28 @@
     },
     {
       "name": "rodata",
-      "size": 92,
+      "size": 5,
+      "section": "rodata",
+      "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 112,
+      "section": "rodata",
+      "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 19,
+      "section": "rodata",
+      "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 20,
       "section": "rodata",
       "object": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
       "category": "rom"
@@ -29940,195 +28771,6 @@
       "size": 122,
       "section": "rodata",
       "object": "modules/hal_nordic/modules/hal_nordic/nrfx/libmodules__hal_nordic__nrfx.a(nrfx_twi_twim.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 49,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 110,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 35,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 46,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 7,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 33,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 127,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 42,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 31,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 45,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 45,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 85,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 71,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 21,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 37,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 49,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 1395,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 22,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 241,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 241,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 35,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 67,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 67,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 55,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 54,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 54,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 64,
-      "section": "rodata",
-      "object": "modules/littlefs/libmodules__littlefs.a(zephyr_lfs_crc.c.obj)",
       "category": "rom"
     },
     {
@@ -31708,13 +30350,6 @@
     },
     {
       "name": "datas",
-      "size": 8,
-      "section": "datas",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "datas",
       "size": 16,
       "section": "datas",
       "object": "zephyr/subsys/mgmt/mcumgr/grp/img_mgmt/libsubsys__mgmt__mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)",
@@ -32193,20 +30828,6 @@
       "name": "device_states",
       "size": 32,
       "section": "device_states",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "device_states",
-      "size": 32,
-      "section": "device_states",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "device_states",
-      "size": 32,
-      "section": "device_states",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
     },
@@ -32215,13 +30836,6 @@
       "size": 24,
       "section": "k_heap_area",
       "object": "zephyr/kernel/libkernel.a(mempool.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "k_heap_area",
-      "size": 24,
-      "section": "k_heap_area",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "ram"
     },
     {
@@ -32302,13 +30916,6 @@
       "category": "ram"
     },
     {
-      "name": "k_mutex_area",
-      "size": 20,
-      "section": "k_mutex_area",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "category": "ram"
-    },
-    {
       "name": "k_sem_area",
       "size": 24,
       "section": "k_sem_area",
@@ -32320,6 +30927,13 @@
       "size": 24,
       "section": "k_sem_area",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "k_sem_area",
+      "size": 24,
+      "section": "k_sem_area",
+      "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
     },
     {
@@ -32481,6 +31095,13 @@
       "size": 216,
       "section": "bss",
       "object": "app/libapp.a(svc_sensor.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 8,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
     },
     {
@@ -32743,8 +31364,8 @@
       "category": "ram"
     },
     {
-      "name": "bss",
-      "size": 68,
+      "name": "bss.state",
+      "size": 32,
       "section": "bss",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
@@ -32752,6 +31373,83 @@
     {
       "name": "bss",
       "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4096,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss.diag",
+      "size": 20,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4096,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 20,
       "section": "bss",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
@@ -32759,13 +31457,6 @@
     {
       "name": "bss",
       "size": 16384,
-      "section": "bss",
-      "object": "app/libapp.a(svc_storage.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "bss",
-      "size": 4,
       "section": "bss",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
@@ -32824,13 +31515,6 @@
       "size": 4,
       "section": "bss",
       "object": "app/libapp.a(drv_baro.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "bss",
-      "size": 20,
-      "section": "bss",
-      "object": "app/libapp.a(drv_nand.c.obj)",
       "category": "ram"
     },
     {
@@ -33020,13 +31704,6 @@
       "size": 4,
       "section": "bss",
       "object": "zephyr/lib/net_buf/liblib__net_buf.a(buf.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "bss.registry",
-      "size": 16,
-      "section": "bss",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
       "category": "ram"
     },
     {
@@ -33262,7 +31939,7 @@
     },
     {
       "name": "bss",
-      "size": 40,
+      "size": 48,
       "section": "bss",
       "object": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
       "category": "ram"
@@ -33621,6 +32298,13 @@
       "name": "bss",
       "size": 1,
       "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 1,
+      "section": "bss",
       "object": "app/libapp.a(drv_led.c.obj)",
       "category": "ram"
     },
@@ -33717,7 +32401,7 @@
     },
     {
       "name": "noinit",
-      "size": 2048,
+      "size": 4096,
       "section": "noinit",
       "object": "app/libapp.a(svc_ble_cmd.c.obj)",
       "category": "ram"
@@ -33738,7 +32422,7 @@
     },
     {
       "name": "noinit",
-      "size": 1024,
+      "size": 2048,
       "section": "noinit",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
@@ -33748,13 +32432,6 @@
       "size": 2048,
       "section": "noinit",
       "object": "zephyr/libzephyr.a(log_core.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "noinit",
-      "size": 384,
-      "section": "noinit",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "ram"
     },
     {
@@ -33825,20 +32502,6 @@
       "size": 32768,
       "section": "noinit",
       "object": "zephyr/kernel/libkernel.a(mempool.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "noinit",
-      "size": 208,
-      "section": "noinit",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "category": "ram"
-    },
-    {
-      "name": "noinit",
-      "size": 400,
-      "section": "noinit",
-      "object": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
       "category": "ram"
     },
     {
@@ -34028,11 +32691,6 @@
       "rom": 16,
       "ram": 0
     },
-    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_popcountsi2.o)": {
-      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_popcountsi2.o)",
-      "rom": 38,
-      "ram": 0
-    },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_udivmoddi4.o)": {
       "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_udivmoddi4.o)",
       "rom": 676,
@@ -34080,7 +32738,7 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 1607,
+      "rom": 1671,
       "ram": 76
     },
     "app/libapp.a(svc_ble.c.obj)": {
@@ -34090,17 +32748,17 @@
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2042,
+      "rom": 2026,
       "ram": 334
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
       "name": "app/libapp.a(svc_ble_cmd.c.obj)",
       "rom": 1888,
-      "ram": 2872
+      "ram": 4920
     },
     "app/libapp.a(svc_ble_status.c.obj)": {
       "name": "app/libapp.a(svc_ble_status.c.obj)",
-      "rom": 759,
+      "rom": 743,
       "ram": 1464
     },
     "app/libapp.a(ble_protocol.c.obj)": {
@@ -34110,13 +32768,13 @@
     },
     "app/libapp.a(svc_sensor.c.obj)": {
       "name": "app/libapp.a(svc_sensor.c.obj)",
-      "rom": 1954,
+      "rom": 2126,
       "ram": 2404
     },
     "app/libapp.a(svc_storage.c.obj)": {
       "name": "app/libapp.a(svc_storage.c.obj)",
-      "rom": 1382,
-      "ram": 17700
+      "rom": 4302,
+      "ram": 26977
     },
     "app/libapp.a(svc_power.c.obj)": {
       "name": "app/libapp.a(svc_power.c.obj)",
@@ -34142,11 +32800,6 @@
       "name": "app/libapp.a(drv_baro.c.obj)",
       "rom": 1107,
       "ram": 16
-    },
-    "app/libapp.a(drv_nand.c.obj)": {
-      "name": "app/libapp.a(drv_nand.c.obj)",
-      "rom": 153,
-      "ram": 20
     },
     "app/libapp.a(drv_led.c.obj)": {
       "name": "app/libapp.a(drv_led.c.obj)",
@@ -34196,6 +32849,11 @@
     "zephyr/libzephyr.a(notify.c.obj)": {
       "name": "zephyr/libzephyr.a(notify.c.obj)",
       "rom": 188,
+      "ram": 0
+    },
+    "zephyr/libzephyr.a(ring_buffer.c.obj)": {
+      "name": "zephyr/libzephyr.a(ring_buffer.c.obj)",
+      "rom": 615,
       "ram": 0
     },
     "zephyr/libzephyr.a(log_core.c.obj)": {
@@ -34398,21 +33056,6 @@
       "rom": 42,
       "ram": 0
     },
-    "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)": {
-      "name": "zephyr/subsys/fs/libsubsys__fs.a(fs.c.obj)",
-      "rom": 1402,
-      "ram": 44
-    },
-    "zephyr/subsys/fs/libsubsys__fs.a(fs_impl.c.obj)": {
-      "name": "zephyr/subsys/fs/libsubsys__fs.a(fs_impl.c.obj)",
-      "rom": 30,
-      "ram": 0
-    },
-    "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)": {
-      "name": "zephyr/subsys/fs/libsubsys__fs.a(littlefs_fs.c.obj)",
-      "rom": 4742,
-      "ram": 1080
-    },
     "zephyr/subsys/mgmt/mcumgr/mgmt/libsubsys__mgmt__mcumgr__mgmt.a(mgmt.c.obj)": {
       "name": "zephyr/subsys/mgmt/mcumgr/mgmt/libsubsys__mgmt__mcumgr__mgmt.a(mgmt.c.obj)",
       "rom": 714,
@@ -34440,7 +33083,7 @@
     },
     "zephyr/subsys/mgmt/mcumgr/grp/img_mgmt/libsubsys__mgmt__mcumgr__grp__img_mgmt.a(img_mgmt_state.c.obj)": {
       "name": "zephyr/subsys/mgmt/mcumgr/grp/img_mgmt/libsubsys__mgmt__mcumgr__grp__img_mgmt.a(img_mgmt_state.c.obj)",
-      "rom": 1944,
+      "rom": 1936,
       "ram": 0
     },
     "zephyr/subsys/mgmt/mcumgr/grp/os_mgmt/libsubsys__mgmt__mcumgr__grp__os_mgmt.a(os_mgmt.c.obj)": {
@@ -34555,13 +33198,13 @@
     },
     "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)": {
       "name": "zephyr/drivers/flash/libdrivers__flash.a(soc_flash_nrf_rram.c.obj)",
-      "rom": 974,
+      "rom": 1170,
       "ram": 26
     },
     "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)": {
       "name": "zephyr/drivers/flash/libdrivers__flash.a(spi_nor.c.obj)",
-      "rom": 5564,
-      "ram": 154
+      "rom": 6799,
+      "ram": 162
     },
     "zephyr/drivers/gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)": {
       "name": "zephyr/drivers/gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)",
@@ -34665,7 +33308,7 @@
     },
     "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)": {
       "name": "modules/nrf/drivers/mpsl/flash_sync/lib..__nrf__drivers__mpsl__flash_sync.a(flash_sync_mpsl.c.obj)",
-      "rom": 1083,
+      "rom": 1439,
       "ram": 68
     },
     "modules/nrf/drivers/mpsl/temp_nrf5/lib..__nrf__drivers__mpsl__temp_nrf5.a(temp_nrf5_mpsl.c.obj)": {
@@ -34723,16 +33366,6 @@
       "rom": 546,
       "ram": 0
     },
-    "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)": {
-      "name": "modules/littlefs/libmodules__littlefs.a(lfs.c.obj)",
-      "rom": 25304,
-      "ram": 0
-    },
-    "modules/littlefs/libmodules__littlefs.a(zephyr_lfs_crc.c.obj)": {
-      "name": "modules/littlefs/libmodules__littlefs.a(zephyr_lfs_crc.c.obj)",
-      "rom": 128,
-      "ram": 0
-    },
     "modules/segger/libmodules__segger.a(SEGGER_RTT.c.obj)": {
       "name": "modules/segger/libmodules__segger.a(SEGGER_RTT.c.obj)",
       "rom": 1988,
@@ -34760,7 +33393,7 @@
     },
     "zephyr/kernel/libkernel.a(kheap.c.obj)": {
       "name": "zephyr/kernel/libkernel.a(kheap.c.obj)",
-      "rom": 816,
+      "rom": 424,
       "ram": 0
     },
     "zephyr/kernel/libkernel.a(mem_slab.c.obj)": {
@@ -34965,7 +33598,7 @@
     },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-malloc.o)": {
       "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-malloc.o)",
-      "rom": 32,
+      "rom": 16,
       "ram": 0
     },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-nano-freer.o)": {
@@ -35193,29 +33826,9 @@
       "rom": 16,
       "ram": 0
     },
-    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strchr.o)": {
-      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strchr.o)",
-      "rom": 26,
-      "ram": 0
-    },
-    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strcspn.o)": {
-      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strcspn.o)",
-      "rom": 34,
-      "ram": 0
-    },
-    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncmp.o)": {
-      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncmp.o)",
-      "rom": 36,
-      "ram": 0
-    },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncpy.o)": {
       "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strncpy.o)",
       "rom": 38,
-      "ram": 0
-    },
-    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strspn.o)": {
-      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-strspn.o)",
-      "rom": 32,
       "ram": 0
     },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/lib/thumb/v8-m.main+fp/hard/libc_nano.a(lib_a-memchr-stub.o)": {
@@ -35265,7 +33878,7 @@
     },
     "zephyr/libzephyr.a(flash_map_partition_manager.c.obj)": {
       "name": "zephyr/libzephyr.a(flash_map_partition_manager.c.obj)",
-      "rom": 148,
+      "rom": 132,
       "ram": 4
     },
     "zephyr/arch/arch/arm/core/mpu/libarch__arm__core__mpu.a(arm_mpu_regions.c.obj)": {
@@ -35306,11 +33919,11 @@
     },
     "text": {
       "name": "text",
-      "size": 322032
+      "size": 298924
     },
     "initlevel": {
       "name": "initlevel",
-      "size": 328
+      "size": 320
     },
     "device_area": {
       "name": "device_area",
@@ -35318,11 +33931,11 @@
     },
     "log_const_area": {
       "name": "log_const_area",
-      "size": 584
+      "size": 560
     },
     "rodata": {
       "name": "rodata",
-      "size": 46196
+      "size": 42740
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -35330,7 +33943,7 @@
     },
     "datas": {
       "name": "datas",
-      "size": 5038
+      "size": 5030
     },
     "sw_isr_table": {
       "name": "sw_isr_table",
@@ -35342,15 +33955,15 @@
     },
     "k_heap_area": {
       "name": "k_heap_area",
-      "size": 48
+      "size": 24
     },
     "k_mutex_area": {
       "name": "k_mutex_area",
-      "size": 240
+      "size": 220
     },
     "k_sem_area": {
       "name": "k_sem_area",
-      "size": 48
+      "size": 72
     },
     "k_event_area": {
       "name": "k_event_area",
@@ -35366,11 +33979,11 @@
     },
     "bss": {
       "name": "bss",
-      "size": 43420
+      "size": 51621
     },
     "noinit": {
       "name": "noinit",
-      "size": 91644
+      "size": 93724
     }
   }
 }
