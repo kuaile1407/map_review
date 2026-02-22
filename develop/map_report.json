@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 301120,
-    "ro": 43300,
+    "code": 301056,
+    "ro": 43316,
     "rw": 5030,
-    "zi": 147937,
+    "zi": 148017,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349450,
-  "total_ram": 152967,
+  "total_rom": 349402,
+  "total_ram": 153047,
   "symbols": [
     {
       "name": "rom_start",
@@ -7124,6 +7124,13 @@
     },
     {
       "name": "text",
+      "size": 16,
+      "section": "text",
+      "object": "app/libapp.a(svc_sensor.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 292,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
@@ -7131,14 +7138,14 @@
     },
     {
       "name": "text",
-      "size": 504,
+      "size": 408,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 208,
+      "size": 204,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -7152,7 +7159,7 @@
     },
     {
       "name": "text",
-      "size": 84,
+      "size": 104,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -24260,7 +24267,7 @@
     },
     {
       "name": "rodata",
-      "size": 74,
+      "size": 90,
       "section": "rodata",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -31092,6 +31099,13 @@
     },
     {
       "name": "bss",
+      "size": 56,
+      "section": "bss",
+      "object": "app/libapp.a(svc_sensor.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
       "size": 216,
       "section": "bss",
       "object": "app/libapp.a(svc_sensor.c.obj)",
@@ -31347,6 +31361,13 @@
       "size": 544,
       "section": "bss",
       "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 24,
+      "section": "bss",
+      "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "ram"
     },
     {
@@ -32768,8 +32789,8 @@
     },
     "app/libapp.a(svc_sensor.c.obj)": {
       "name": "app/libapp.a(svc_sensor.c.obj)",
-      "rom": 2126,
-      "ram": 2404
+      "rom": 2078,
+      "ram": 2484
     },
     "app/libapp.a(svc_storage.c.obj)": {
       "name": "app/libapp.a(svc_storage.c.obj)",
@@ -33919,7 +33940,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298928
+      "size": 298864
     },
     "initlevel": {
       "name": "initlevel",
@@ -33935,7 +33956,7 @@
     },
     "rodata": {
       "name": "rodata",
-      "size": 42740
+      "size": 42756
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -33979,7 +34000,7 @@
     },
     "bss": {
       "name": "bss",
-      "size": 51621
+      "size": 51701
     },
     "noinit": {
       "name": "noinit",
