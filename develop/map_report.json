@@ -3,12 +3,12 @@
     "code": 301056,
     "ro": 43316,
     "rw": 5030,
-    "zi": 148017,
+    "zi": 162121,
     "heap": 32812,
     "stack": 28216
   },
   "total_rom": 349402,
-  "total_ram": 153047,
+  "total_ram": 167151,
   "symbols": [
     {
       "name": "rom_start",
@@ -31820,7 +31820,7 @@
     },
     {
       "name": "bss.conn_tx",
-      "size": 36,
+      "size": 240,
       "section": "bss",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "category": "ram"
@@ -31841,7 +31841,7 @@
     },
     {
       "name": "bss",
-      "size": 72,
+      "size": 480,
       "section": "bss",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
@@ -32541,14 +32541,14 @@
     },
     {
       "name": "noinit",
-      "size": 3328,
+      "size": 6144,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)",
       "category": "ram"
     },
     {
       "name": "noinit",
-      "size": 364,
+      "size": 672,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)",
       "category": "ram"
@@ -32604,14 +32604,14 @@
     },
     {
       "name": "noinit",
-      "size": 768,
+      "size": 5120,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "category": "ram"
     },
     {
       "name": "noinit",
-      "size": 120,
+      "size": 800,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "category": "ram"
@@ -32625,14 +32625,14 @@
     },
     {
       "name": "noinit",
-      "size": 774,
+      "size": 5160,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
     },
     {
       "name": "noinit",
-      "size": 120,
+      "size": 800,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
@@ -32646,7 +32646,7 @@
     },
     {
       "name": "noinit",
-      "size": 48,
+      "size": 320,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
@@ -33145,7 +33145,7 @@
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)",
       "rom": 1065,
-      "ram": 4389
+      "ram": 7513
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(hci_core.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(hci_core.c.obj)",
@@ -33165,7 +33165,7 @@
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "rom": 8916,
-      "ram": 1680
+      "ram": 6916
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(l2cap.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(l2cap.c.obj)",
@@ -33175,7 +33175,7 @@
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "rom": 11020,
-      "ram": 3653
+      "ram": 9399
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(gatt.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(gatt.c.obj)",
@@ -34000,11 +34000,11 @@
     },
     "bss": {
       "name": "bss",
-      "size": 51701
+      "size": 52313
     },
     "noinit": {
       "name": "noinit",
-      "size": 93724
+      "size": 107216
     }
   }
 }
