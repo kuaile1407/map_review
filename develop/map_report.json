@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 301056,
-    "ro": 43316,
+    "code": 301068,
+    "ro": 43404,
     "rw": 5030,
-    "zi": 162121,
+    "zi": 180669,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349402,
-  "total_ram": 167151,
+  "total_rom": 349502,
+  "total_ram": 185699,
   "symbols": [
     {
       "name": "rom_start",
@@ -6746,6 +6746,13 @@
     },
     {
       "name": "text",
+      "size": 56,
+      "section": "text",
+      "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 40,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
@@ -6768,13 +6775,6 @@
     {
       "name": "text",
       "size": 264,
-      "section": "text",
-      "object": "app/libapp.a(app_ski.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 200,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -7104,6 +7104,13 @@
     {
       "name": "text",
       "size": 60,
+      "section": "text",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 196,
       "section": "text",
       "object": "app/libapp.a(ble_protocol.c.obj)",
       "category": "rom"
@@ -10512,7 +10519,7 @@
     },
     {
       "name": "text",
-      "size": 300,
+      "size": 304,
       "section": "text",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "rom"
@@ -12185,21 +12192,14 @@
     },
     {
       "name": "text",
-      "size": 112,
+      "size": 92,
       "section": "text",
       "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 96,
-      "section": "text",
-      "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
-      "size": 96,
+      "size": 92,
       "section": "text",
       "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
       "category": "rom"
@@ -15056,6 +15056,13 @@
     {
       "name": "text",
       "size": 36,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble_gatt.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 8,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -17981,7 +17988,7 @@
     },
     {
       "name": "text",
-      "size": 52,
+      "size": 54,
       "section": "text",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "rom"
@@ -18289,7 +18296,7 @@
     },
     {
       "name": "text",
-      "size": 24,
+      "size": 22,
       "section": "text",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(gatt.c.obj)",
       "category": "rom"
@@ -19935,6 +19942,13 @@
     {
       "name": "text",
       "size": 42,
+      "section": "text",
+      "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 70,
       "section": "text",
       "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
       "category": "rom"
@@ -23875,6 +23889,13 @@
     },
     {
       "name": "rodata",
+      "size": 65,
+      "section": "rodata",
+      "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
       "size": 26,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
@@ -23883,13 +23904,6 @@
     {
       "name": "rodata",
       "size": 29,
-      "section": "rodata",
-      "object": "app/libapp.a(app_ski.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
-      "size": 36,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -24240,6 +24254,13 @@
     {
       "name": "rodata",
       "size": 40,
+      "section": "rodata",
+      "object": "app/libapp.a(ble_protocol.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 53,
       "section": "rodata",
       "object": "app/libapp.a(ble_protocol.c.obj)",
       "category": "rom"
@@ -32065,7 +32086,7 @@
     },
     {
       "name": "bss",
-      "size": 257,
+      "size": 522,
       "section": "bss",
       "object": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
       "category": "ram"
@@ -32541,7 +32562,7 @@
     },
     {
       "name": "noinit",
-      "size": 6144,
+      "size": 12504,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)",
       "category": "ram"
@@ -32604,7 +32625,7 @@
     },
     {
       "name": "noinit",
-      "size": 5120,
+      "size": 10420,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "category": "ram"
@@ -32625,7 +32646,7 @@
     },
     {
       "name": "noinit",
-      "size": 5160,
+      "size": 10460,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
@@ -32653,7 +32674,7 @@
     },
     {
       "name": "noinit",
-      "size": 1235,
+      "size": 2560,
       "section": "noinit",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
       "category": "ram"
@@ -32759,7 +32780,7 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 1671,
+      "rom": 1556,
       "ram": 76
     },
     "app/libapp.a(svc_ble.c.obj)": {
@@ -32769,7 +32790,7 @@
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2026,
+      "rom": 2034,
       "ram": 334
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
@@ -32784,7 +32805,7 @@
     },
     "app/libapp.a(ble_protocol.c.obj)": {
       "name": "app/libapp.a(ble_protocol.c.obj)",
-      "rom": 1277,
+      "rom": 1526,
       "ram": 544
     },
     "app/libapp.a(svc_sensor.c.obj)": {
@@ -33145,7 +33166,7 @@
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(buf.c.obj)",
       "rom": 1065,
-      "ram": 7513
+      "ram": 13873
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(hci_core.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(hci_core.c.obj)",
@@ -33165,7 +33186,7 @@
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(conn.c.obj)",
       "rom": 8916,
-      "ram": 6916
+      "ram": 12216
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(l2cap.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(l2cap.c.obj)",
@@ -33174,12 +33195,12 @@
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(att.c.obj)",
-      "rom": 11020,
-      "ram": 9399
+      "rom": 11026,
+      "ram": 16024
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(gatt.c.obj)": {
       "name": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(gatt.c.obj)",
-      "rom": 12683,
+      "rom": 12681,
       "ram": 658
     },
     "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(smp_null.c.obj)": {
@@ -33299,8 +33320,8 @@
     },
     "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)": {
       "name": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_driver.c.obj)",
-      "rom": 2531,
-      "ram": 5699
+      "rom": 2481,
+      "ram": 5964
     },
     "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_internal.c.obj)": {
       "name": "modules/nrf/subsys/bluetooth/controller/lib..__nrf__subsys__bluetooth__controller.a(hci_internal.c.obj)",
@@ -33940,7 +33961,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298864
+      "size": 298876
     },
     "initlevel": {
       "name": "initlevel",
@@ -33956,7 +33977,7 @@
     },
     "rodata": {
       "name": "rodata",
-      "size": 42756
+      "size": 42844
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -34000,11 +34021,11 @@
     },
     "bss": {
       "name": "bss",
-      "size": 52313
+      "size": 52577
     },
     "noinit": {
       "name": "noinit",
-      "size": 107216
+      "size": 125500
     }
   }
 }
