@@ -1,13 +1,13 @@
 {
   "stats": {
-    "code": 301068,
+    "code": 301088,
     "ro": 43404,
     "rw": 5030,
     "zi": 180669,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349502,
+  "total_rom": 349522,
   "total_ram": 185699,
   "symbols": [
     {
@@ -6949,7 +6949,7 @@
     },
     {
       "name": "text",
-      "size": 360,
+      "size": 380,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -32790,7 +32790,7 @@
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2034,
+      "rom": 2054,
       "ram": 334
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
@@ -33961,7 +33961,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298876
+      "size": 298896
     },
     "initlevel": {
       "name": "initlevel",
