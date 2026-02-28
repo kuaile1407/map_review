@@ -1,13 +1,13 @@
 {
   "stats": {
-    "code": 301088,
+    "code": 301100,
     "ro": 43404,
     "rw": 5030,
     "zi": 180669,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349522,
+  "total_rom": 349534,
   "total_ram": 185699,
   "symbols": [
     {
@@ -6795,7 +6795,7 @@
     },
     {
       "name": "text",
-      "size": 76,
+      "size": 80,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -15056,6 +15056,13 @@
     {
       "name": "text",
       "size": 36,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble_gatt.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 8,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -32780,7 +32787,7 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 1556,
+      "rom": 1560,
       "ram": 76
     },
     "app/libapp.a(svc_ble.c.obj)": {
@@ -32790,7 +32797,7 @@
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2054,
+      "rom": 2062,
       "ram": 334
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
@@ -33961,7 +33968,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298896
+      "size": 298908
     },
     "initlevel": {
       "name": "initlevel",
