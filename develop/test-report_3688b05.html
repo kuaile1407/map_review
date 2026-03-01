@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUnit XML 报告</title>
+    <style>
+        /* 全局样式 */
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }}
+
+        /* 容器 */
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }}
+
+        /* 标题 */
+        h1 {{
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }}
+
+        /* 统计信息 */
+        .statistics {{
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }}
+
+        h2 {{
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }}
+
+        .stats-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }}
+
+        .stat-card {{
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }}
+
+        .stat-card:hover {{
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }}
+
+        .stat-card.total {{
+            background-color: #e3f2fd;
+        }}
+
+        .stat-card.pass {{
+            background-color: #e8f5e9;
+        }}
+
+        .stat-card.fail {{
+            background-color: #ffebee;
+        }}
+
+        .stat-card.error {{
+            background-color: #fff3e0;
+        }}
+
+        .stat-card.skip {{
+            background-color: #f3e5f5;
+        }}
+
+        .stat-card.rate {{
+            background-color: #fff9c4;
+        }}
+
+        .stat-card.time {{
+            background-color: #f1f8e9;
+        }}
+
+        .stat-value {{
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2196F3;
+        }}
+
+        .stat-label {{
+            font-size: 0.9rem;
+            color: #757575;
+            margin-top: 5px;
+        }}
+
+        /* 测试套件 */
+        .test-suites {{
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }}
+
+        .suites-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }}
+
+        .suite-card {{
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+        }}
+
+        .suite-card:hover {{
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }}
+
+        .suite-card h3 {{
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }}
+
+        .suite-stats {{
+            font-size: 0.9rem;
+            color: #757575;
+        }}
+
+        .suite-stats .stat {{
+            margin-right: 10px;
+        }}
+
+        /* 测试用例表格 */
+        .test-cases {{
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+        }}
+
+        thead {{
+            background-color: #f8f9fa;
+        }}
+
+        th, td {{
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }}
+
+        th {{
+            font-weight: bold;
+            color: #34495e;
+        }}
+
+        tbody tr:hover {{
+            background-color: #f8f9fa;
+        }}
+
+        /* 状态样式 */
+        .status-pass {{
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }}
+
+        .status-fail {{
+            color: #F44336;
+            font-size: 1.2rem;
+        }}
+
+        .status-error {{
+            color: #FF9800;
+            font-size: 1.2rem;
+        }}
+
+        .status-skip {{
+            color: #9C27B0;
+            font-size: 1.2rem;
+        }}
+
+        /* 详情信息 */
+        .failure-details, .error-details, .skip-details {{
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #fff3e0;
+            font-size: 0.9rem;
+        }}
+
+        .failure-details {{
+            background-color: #ffebee;
+        }}
+
+        .error-details {{
+            background-color: #fff3e0;
+        }}
+
+        .skip-details {{
+            background-color: #f3e5f5;
+        }}
+
+        pre {{
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }}
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {{
+            .stats-grid, .suites-grid {{
+                grid-template-columns: 1fr;
+            }}
+
+            table {{
+                font-size: 0.9rem;
+            }}
+
+            th, td {{
+                padding: 8px;
+            }}
+        }}
+
+        /* 页脚 */
+        .footer {{
+            text-align: center;
+            margin-top: 20px;
+            color: #757575;
+            font-size: 0.9rem;
+        }}
+
+        /* 导航 */
+        .nav {{
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }}
+
+        .nav ul {{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+        }}
+
+        .nav ul li {{
+            display: inline;
+        }}
+
+        .nav ul li a {{
+            color: #2196F3;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }}
+
+        .nav ul li a:hover {{
+            background-color: #e3f2fd;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JUnit XML 报告</h1>
+        <div class="nav">
+            <ul>
+                <li><a href="#statistics">测试统计</a></li>
+                <li><a href="#test-suites">测试套件</a></li>
+                <li><a href="#test-cases">测试用例</a></li>
+            </ul>
+        </div>
+        <div class="statistics">
+    <h2>测试统计</h2>
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="stat-value">7</div>
+            <div class="stat-label">总测试数</div>
+        </div>
+        <div class="stat-card pass">
+            <div class="stat-value">7</div>
+            <div class="stat-label">通过</div>
+        </div>
+        <div class="stat-card fail">
+            <div class="stat-value">0</div>
+            <div class="stat-label">失败</div>
+        </div>
+        <div class="stat-card error">
+            <div class="stat-value">0</div>
+            <div class="stat-label">错误</div>
+        </div>
+        <div class="stat-card skip">
+            <div class="stat-value">0</div>
+            <div class="stat-label">跳过</div>
+        </div>
+        <div class="stat-card rate">
+            <div class="stat-value">100.0%</div>
+            <div class="stat-label">通过率</div>
+        </div>
+        <div class="stat-card time">
+            <div class="stat-value">0.96秒</div>
+            <div class="stat-label">总耗时</div>
+        </div>
+    </div>
+</div>
+        <div id="test-suites">
+            <div class="test-suites"><h2>测试套件</h2><div class="suites-grid">
+        <div class="suite-card">
+            <h3>native_sim/native</h3>
+            <div class="suite-stats">
+                <span class="stat">测试数: 7</span>
+                <span class="stat">通过: 7</span>
+                <span class="stat">失败: 0</span>
+                <span class="stat">错误: 0</span>
+                <span class="stat">跳过: 0</span>
+                <span class="stat">通过率: 100.0%</span>
+                <span class="stat">耗时: 0.96秒</span>
+            </div>
+        </div>
+        </div></div>
+        </div>
+        <div id="test-cases">
+            <div class="test-cases"><h2>测试用例详情</h2><table>
+    <thead>
+        <tr>
+            <th>状态</th>
+            <th>测试用例</th>
+            <th>套件</th>
+            <th>耗时</th>
+            <th>详情</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>ble_protocol.unit</strong></td>
+            <td>native_sim/native:ble_protocol.unit</td>
+            <td>0.14秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>svc_power.unit</strong></td>
+            <td>native_sim/native:svc_power.unit</td>
+            <td>0.10秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>svc_sensor_fusion.unit</strong></td>
+            <td>native_sim/native:svc_sensor_fusion.unit</td>
+            <td>0.07秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>app_state.unit</strong></td>
+            <td>native_sim/native:app_state.unit</td>
+            <td>0.17秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>storage_frame.unit</strong></td>
+            <td>native_sim/native:storage_frame.unit</td>
+            <td>0.08秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>lib_ringbuf.unit</strong></td>
+            <td>native_sim/native:lib_ringbuf.unit</td>
+            <td>0.31秒</td>
+            <td></td>
+        </tr>
+        
+        <tr class="test-case pass">
+            <td><span class="status-pass">✅</span></td>
+            <td><strong>events.unit</strong></td>
+            <td>native_sim/native:events.unit</td>
+            <td>0.09秒</td>
+            <td></td>
+        </tr>
+        </tbody></table></div>
+        </div>
+        <div class="footer">
+            <p>生成时间: 2026-03-01 17:04:33</p>
+            <p>报告版本: 1.0</p>
+        </div>
+    </div>
+</body>
+</html>
