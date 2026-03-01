@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 301100,
-    "ro": 43404,
+    "code": 302632,
+    "ro": 43664,
     "rw": 5030,
-    "zi": 180669,
+    "zi": 180749,
     "heap": 32812,
     "stack": 28216
   },
-  "total_rom": 349534,
-  "total_ram": 185699,
+  "total_rom": 351326,
+  "total_ram": 185779,
   "symbols": [
     {
       "name": "rom_start",
@@ -3375,6 +3375,13 @@
       "size": 24,
       "section": "text",
       "object": "/__w/HeyGo_nRF54L15_FW/HeyGo_nRF54L15_FW/nrfxlib/mpsl/lib/nrf54l/hard-float/libmpsl.a(libmpsl_debug_hardfp__obfuscated.elf)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 888,
+      "section": "text",
+      "object": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_arm_addsubdf3.o)",
       "category": "rom"
     },
     {
@@ -6788,14 +6795,14 @@
     },
     {
       "name": "text",
-      "size": 244,
+      "size": 280,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 80,
+      "size": 72,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -6809,7 +6816,14 @@
     },
     {
       "name": "text",
-      "size": 72,
+      "size": 372,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 84,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -6879,7 +6893,7 @@
     },
     {
       "name": "text",
-      "size": 204,
+      "size": 220,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -6893,7 +6907,7 @@
     },
     {
       "name": "text",
-      "size": 196,
+      "size": 312,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -6901,6 +6915,20 @@
     {
       "name": "text",
       "size": 40,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 20,
+      "section": "text",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
+      "size": 44,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -6949,7 +6977,7 @@
     },
     {
       "name": "text",
-      "size": 380,
+      "size": 388,
       "section": "text",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
       "category": "rom"
@@ -7138,7 +7166,7 @@
     },
     {
       "name": "text",
-      "size": 292,
+      "size": 260,
       "section": "text",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -7236,7 +7264,7 @@
     },
     {
       "name": "text",
-      "size": 688,
+      "size": 704,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
@@ -7257,7 +7285,7 @@
     },
     {
       "name": "text",
-      "size": 460,
+      "size": 504,
       "section": "text",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "rom"
@@ -23924,7 +23952,7 @@
     },
     {
       "name": "rodata",
-      "size": 144,
+      "size": 228,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -23948,6 +23976,13 @@
       "size": 8,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 66,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
@@ -24008,7 +24043,14 @@
     },
     {
       "name": "rodata",
-      "size": 94,
+      "size": 139,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 45,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -24323,7 +24365,7 @@
     },
     {
       "name": "rodata",
-      "size": 73,
+      "size": 89,
       "section": "rodata",
       "object": "app/libapp.a(svc_sensor.c.obj)",
       "category": "rom"
@@ -30954,6 +30996,13 @@
       "name": "k_sem_area",
       "size": 24,
       "section": "k_sem_area",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "k_sem_area",
+      "size": 24,
+      "section": "k_sem_area",
       "object": "zephyr/libzephyr.a(log_core.c.obj)",
       "category": "ram"
     },
@@ -31095,6 +31144,13 @@
       "size": 24,
       "section": "bss",
       "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 48,
+      "section": "bss",
+      "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "ram"
     },
     {
@@ -31351,7 +31407,7 @@
     },
     {
       "name": "bss",
-      "size": 12,
+      "size": 16,
       "section": "bss",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "ram"
@@ -31478,6 +31534,13 @@
     {
       "name": "bss",
       "size": 4096,
+      "section": "bss",
+      "object": "app/libapp.a(svc_storage.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 4,
       "section": "bss",
       "object": "app/libapp.a(svc_storage.c.obj)",
       "category": "ram"
@@ -32720,6 +32783,11 @@
       "rom": 14682,
       "ram": 1886
     },
+    "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_arm_addsubdf3.o)": {
+      "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_arm_addsubdf3.o)",
+      "rom": 888,
+      "ram": 0
+    },
     "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_aeabi_ldivmod.o)": {
       "name": "/opt/ncs/toolchains/43683a87ea/opt/zephyr-sdk/arm-zephyr-eabi/bin/../lib/gcc/arm-zephyr-eabi/12.2.0/thumb/v8-m.main+fp/hard/libgcc.a(_aeabi_ldivmod.o)",
       "rom": 160,
@@ -32787,17 +32855,17 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 1560,
+      "rom": 1672,
       "ram": 76
     },
     "app/libapp.a(svc_ble.c.obj)": {
       "name": "app/libapp.a(svc_ble.c.obj)",
-      "rom": 2968,
-      "ram": 110
+      "rom": 3704,
+      "ram": 186
     },
     "app/libapp.a(svc_ble_gatt.c.obj)": {
       "name": "app/libapp.a(svc_ble_gatt.c.obj)",
-      "rom": 2062,
+      "rom": 2070,
       "ram": 334
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
@@ -32817,13 +32885,13 @@
     },
     "app/libapp.a(svc_sensor.c.obj)": {
       "name": "app/libapp.a(svc_sensor.c.obj)",
-      "rom": 2078,
+      "rom": 2062,
       "ram": 2484
     },
     "app/libapp.a(svc_storage.c.obj)": {
       "name": "app/libapp.a(svc_storage.c.obj)",
-      "rom": 4302,
-      "ram": 26977
+      "rom": 4362,
+      "ram": 26981
     },
     "app/libapp.a(svc_power.c.obj)": {
       "name": "app/libapp.a(svc_power.c.obj)",
@@ -33968,7 +34036,7 @@
     },
     "text": {
       "name": "text",
-      "size": 298908
+      "size": 300440
     },
     "initlevel": {
       "name": "initlevel",
@@ -33984,7 +34052,7 @@
     },
     "rodata": {
       "name": "rodata",
-      "size": 42844
+      "size": 43104
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -34012,7 +34080,7 @@
     },
     "k_sem_area": {
       "name": "k_sem_area",
-      "size": 72
+      "size": 96
     },
     "k_event_area": {
       "name": "k_event_area",
@@ -34028,7 +34096,7 @@
     },
     "bss": {
       "name": "bss",
-      "size": 52577
+      "size": 52633
     },
     "noinit": {
       "name": "noinit",
