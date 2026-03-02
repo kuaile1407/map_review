@@ -1,0 +1,5894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试报告 - Test Analyzer</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h1 .version {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            font-weight: normal;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        .nav-links button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 15px;
+            padding: 8px 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links button.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: none;
+        }
+
+        .container.active {
+            display: block;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* 统计信息样式 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .stat-item.total {
+            background-color: #f0f8ff;
+            border-left: 4px solid #1e90ff;
+        }
+
+        .stat-item.pass {
+            background-color: #f0fff4;
+            border-left: 4px solid #28a745;
+        }
+
+        .stat-item.fail {
+            background-color: #fff5f5;
+            border-left: 4px solid #dc3545;
+        }
+
+        .stat-item.error {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .stat-item.skip {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* 状态图标 */
+        .status-pass::before { content: "✅"; font-size: 1.2rem; margin-right: 5px; }
+        .status-fail::before { content: "❌"; font-size: 1.2rem; margin-right: 5px; }
+        .status-error::before { content: "⚠️"; font-size: 1.2rem; margin-right: 5px; }
+        .status-skip::before { content: "⏭️"; font-size: 1.2rem; margin-right: 5px; }
+
+        /* 详情样式 */
+        .details {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links button {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🧪 测试报告 <span class="version">v1.0</span></h1>
+        <div class="nav-links">
+            <button class="active" onclick="switchPage('summary')">📊 报告概览</button>
+            <button onclick="switchPage('twister')">📄 twister.xml</button>
+            <button onclick="switchPage('twister_report')">📄 twister_report.xml</button>
+            <button onclick="switchPage('twister_suite_report')">📄 twister_suite_report.xml</button>
+        </div>
+    </nav>
+
+    <!-- 报告概览页面 -->
+    <div id="summary-page" class="container active">
+        <div class="card">
+            <h2>📈 报告概览</h2>
+            <p>本页面展示了所有三个报告的概要信息，帮助您快速了解测试结果。</p>
+
+            <div class="stats-grid">
+                <div class="stat-item total">
+                    <span class="stat-value">639</span>
+                    <span class="stat-label">总测试数</span>
+                </div>
+                <div class="stat-item pass">
+                    <span class="stat-value">639</span>
+                    <span class="stat-label">通过</span>
+                </div>
+                <div class="stat-item fail">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">失败</span>
+                </div>
+                <div class="stat-item error">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">错误</span>
+                </div>
+                <div class="stat-item skip">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">跳过</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">100.0%</span>
+                    <span class="stat-label">通过率</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>报告说明</h3>
+                <ul>
+                    <li><strong>twister.xml</strong> - 包含 7 个测试用例</li>
+                <li><strong>twister_report.xml</strong> - 包含 316 个测试用例</li>
+                <li><strong>twister_suite_report.xml</strong> - 包含 316 个测试用例</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 各个报告页面 -->
+    
+    <!-- twister.xml 报告页面 -->
+    <div id="twister-page" class="container">
+        <div class="card">
+            <h2>📄 twister.xml</h2>
+            <p>这是按测试套件组织的报告，包含平台和架构信息。</p>
+
+            <div class="stats-grid">
+                <div class="stat-item total">
+                    <span class="stat-value">7</span>
+                    <span class="stat-label">总测试数</span>
+                </div>
+                <div class="stat-item pass">
+                    <span class="stat-value">7</span>
+                    <span class="stat-label">通过</span>
+                </div>
+                <div class="stat-item fail">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">失败</span>
+                </div>
+                <div class="stat-item error">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">错误</span>
+                </div>
+                <div class="stat-item skip">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">跳过</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">100.0%</span>
+                    <span class="stat-label">通过率</span>
+                </div>
+            </div>
+
+            <p>测试完成时间: 2026-03-02 21:00:43</p>
+            <p>总耗时: 0.93秒</p>
+
+            
+            <div class="card">
+                <h3>📋 测试套件: native_sim/native</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">7</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">7</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_protocol.unit</td>
+                <td>native_sim/native:ble_protocol.unit</td>
+                <td>0.13</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>svc_power.unit</td>
+                <td>native_sim/native:svc_power.unit</td>
+                <td>0.10</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>native_sim/native:svc_sensor_fusion.unit</td>
+                <td>0.07</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>app_state.unit</td>
+                <td>native_sim/native:app_state.unit</td>
+                <td>0.17</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>storage_frame.unit</td>
+                <td>native_sim/native:storage_frame.unit</td>
+                <td>0.07</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>lib_ringbuf.unit</td>
+                <td>native_sim/native:lib_ringbuf.unit</td>
+                <td>0.31</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>events.unit</td>
+                <td>native_sim/native:events.unit</td>
+                <td>0.08</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    <!-- twister_report.xml 报告页面 -->
+    <div id="twister_report-page" class="container">
+        <div class="card">
+            <h2>📄 twister_report.xml</h2>
+            <p>这是按测试套件组织的报告，包含平台和架构信息。</p>
+
+            <div class="stats-grid">
+                <div class="stat-item total">
+                    <span class="stat-value">316</span>
+                    <span class="stat-label">总测试数</span>
+                </div>
+                <div class="stat-item pass">
+                    <span class="stat-value">316</span>
+                    <span class="stat-label">通过</span>
+                </div>
+                <div class="stat-item fail">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">失败</span>
+                </div>
+                <div class="stat-item error">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">错误</span>
+                </div>
+                <div class="stat-item skip">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">跳过</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">100.0%</span>
+                    <span class="stat-label">通过率</span>
+                </div>
+            </div>
+
+            <p>测试完成时间: 2026-03-02 21:00:43</p>
+            <p>总耗时: 0.93秒</p>
+
+            
+            <div class="card">
+                <h3>📋 测试套件: native_sim/native</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">316</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">316</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_send_error</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_get_status_null</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_deinit_discards</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_1000_capped</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_65</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_3</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_enqueue_after_deinit</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_enqueue_null</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_decrease_triggers_flush</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_clear_discards</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_flush_partial</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_flush_empty</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu517_11frames</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu247_5th_triggers</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu247_4frames_no_send</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu91_2frames</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_disabled_direct_send</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_default_mtu</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_payload</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_cmd_id</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_bad_crc</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_06</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_05</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_04</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_03</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_query_status</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_time_sync</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_valid_status</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_min_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_len_mismatch</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_too_short</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_bad_header1</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_bad_header0</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_tampered_crc</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_tampered_payload</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_valid_uplink</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_max_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_null_params_nonzero_len</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_all_tasks</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_all_codes</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_params_truncate</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_buffer_too_small</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_crc_valid</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_with_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_no_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_frame_len_constant</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_data_struct_size</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_le64_timestamp</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_le16_byte_order</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_min_values</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_max_values</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_all_zero</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_null_data</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_crc_selfcheck</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_normal</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_different_data</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_deterministic</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_sequence_256</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_single_ff</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_four_ff</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_four_zeros</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_single_zero</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_empty</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_standard_vector</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.null_charging_cb_no_crash</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.null_low_cb_no_crash</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.charging_cb_called</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.low_battery_cb_called</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_null_status</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_full_not_charging</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_6</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_5</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_zero</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_critical_every_time</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_critical_battery</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_recover_retrigger</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_battery_no_repeat</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_battery_first</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_full_charge</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_unchanged</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_stopped</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_started</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.exit_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_deep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_shallow</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_publishes_event</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_same_mode</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_deep_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_idle</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_mode_initial</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.status_updated_by_callback</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.is_low_battery_false</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.is_charging_false</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_percent</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_null</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_deinit.deinit_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_deinit.deinit_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_registers_callback</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_battery_fail</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_double</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_high_beta</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_zero_rate</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_normal</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_unnormalized</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_zero_quat</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_null_output</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_null_input</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_compound</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_45</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_z_180</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_gimbal_lock</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_neg90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_z_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_y_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_identity</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_mag_null_imu</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_mag_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_not_init</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_null_quat</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_null_imu</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_reset.reset_restores_identity</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_double</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_not_init</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_after_deinit</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_double</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.legacy_name</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.can_transition_always</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_recording</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_advertising</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_recording_in_lift</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_recording_in_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_idle_in_charging</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_comm_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_session_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_not_called_same_state</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_null_no_crash</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_old_new_correct</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.comm_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.session_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.system_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.comm_name_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.session_name_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.system_name_active</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_fallback</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_lift_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_idle_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_deep_sleep_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_low_power_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_ota_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_lift_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_skiing_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_skiing_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_idle_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_standby_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_charging_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_charging_no_upgrade</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_active_no_upgrade</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_preserves_existing_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_low_power_upgrades</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_connected_sets_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_connected_upgrades_system</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_same_no_notify</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_ota_to_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_to_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_skiing_to_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_none_in_charging</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_invalid_value</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_auto_upgrade_from_low_power</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_auto_upgrade_from_standby</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_deep_sleep_rejects_non_none</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_charging_rejects_non_none</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_none_rejected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_idle_rejected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_get_full</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_all_valid_values</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_same_state_no_notify</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_invalid_value</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_low_power_keeps_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_standby_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_deep_sleep_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_charging_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_active</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_init.init_double</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_init.init_ok</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.packed_no_padding</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.with_baro_first_byte</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.imu_only_first_byte</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.pressure_extreme_min</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.pressure_extreme_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.acc_extreme_min</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.acc_extreme_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.delta_ms_boundary_255</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.delta_ms_boundary_0</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.with_baro_fields</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.imu_only_fields</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0xff</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0x03</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0x00</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_with_baro</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_imu_only</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.baro_uint32_max_minus1</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.baro_uint32_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_100</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_99</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_10</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_5</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_4</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_3</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_2</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_1</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_0</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.with_baro_constant</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.imu_only_constant</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.with_baro_size</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.imu_only_size</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_cycle_50</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_read</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_write_when_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_write</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_then_write</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_more_than_available</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_all</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_across_wrap</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_null_out</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_then_read</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_unaligned</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_batch_5_rounds</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_100_cycles</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_fill_at_boundary</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_basic</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_write_read_cycle</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_len_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_null_out</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_more_than_available</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_sequential_fill</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_one_byte</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_len_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_null_data</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_when_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_null</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_with_data</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_size_one</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_size_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_reuse</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_unregister_all</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_full_unregister_reregister</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_no_handlers</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_simple</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_null_event</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_data_passed</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_multi_handlers</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_no_match</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_match</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_stops_delivery</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_then_reregister</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_found_type</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_found_handler</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_normal</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_duplicate</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_different_types</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_same_type_multi</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_full_16</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_null_handler</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_normal</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_init.init_double_returns_ealready</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_init.init_returns_zero</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    <!-- twister_suite_report.xml 报告页面 -->
+    <div id="twister_suite_report-page" class="container">
+        <div class="card">
+            <h2>📄 twister_suite_report.xml</h2>
+            <p>这是按测试套件组织的报告，包含平台和架构信息。</p>
+
+            <div class="stats-grid">
+                <div class="stat-item total">
+                    <span class="stat-value">316</span>
+                    <span class="stat-label">总测试数</span>
+                </div>
+                <div class="stat-item pass">
+                    <span class="stat-value">316</span>
+                    <span class="stat-label">通过</span>
+                </div>
+                <div class="stat-item fail">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">失败</span>
+                </div>
+                <div class="stat-item error">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">错误</span>
+                </div>
+                <div class="stat-item skip">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">跳过</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">100.0%</span>
+                    <span class="stat-label">通过率</span>
+                </div>
+            </div>
+
+            <p>测试完成时间: 2026-03-02 21:00:43</p>
+            <p>总耗时: 0.93秒</p>
+
+            
+            <div class="card">
+                <h3>📋 测试套件: ble_protocol.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">68</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">68</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_send_error</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_get_status_null</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_deinit_discards</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_1000_capped</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_65</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_3</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_enqueue_after_deinit</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_enqueue_null</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu_decrease_triggers_flush</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_clear_discards</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_flush_partial</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_flush_empty</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu517_11frames</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu247_5th_triggers</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu247_4frames_no_send</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_mtu91_2frames</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_disabled_direct_send</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_agg.agg_default_mtu</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_payload</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_cmd_id</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_bad_crc</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_06</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_05</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_04</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_cmd_03</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_query_status</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_downlink.downlink_time_sync</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_valid_status</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_min_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_len_mismatch</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_too_short</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_bad_header1</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_bad_header0</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_tampered_crc</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_tampered_payload</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_verify.verify_valid_uplink</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_max_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_null_params_nonzero_len</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_all_tasks</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_all_codes</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_params_truncate</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_buffer_too_small</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_crc_valid</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_with_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_status.status_no_params</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_frame_len_constant</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_data_struct_size</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_le64_timestamp</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_le16_byte_order</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_min_values</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_max_values</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_all_zero</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_null_frame</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_null_data</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_crc_selfcheck</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_uplink.uplink_normal</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_different_data</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_deterministic</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_sequence_256</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_single_ff</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_four_ff</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_four_zeros</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_single_zero</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_empty</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ble_crc.crc_standard_vector</td>
+                <td>ble_protocol.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: svc_power.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">42</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">42</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.null_charging_cb_no_crash</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.null_low_cb_no_crash</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.charging_cb_called</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_regcb.low_battery_cb_called</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_null_status</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_full_not_charging</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_6</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_5</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_percent_zero</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_critical_every_time</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_critical_battery</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_recover_retrigger</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_battery_no_repeat</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_low_battery_first</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_full_charge</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_unchanged</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_stopped</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_callback.cb_charging_started</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.exit_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_deep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.enter_sleep_shallow</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_publishes_event</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_same_mode</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_deep_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_sleep</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_mode.request_idle</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_mode_initial</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.status_updated_by_callback</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.is_low_battery_false</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.is_charging_false</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_percent</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_null</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_battery.get_status_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_deinit.deinit_not_init</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_deinit.deinit_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_registers_callback</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_battery_fail</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_double</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>pwr_init.init_ok</td>
+                <td>svc_power.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: svc_sensor_fusion.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">29</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">29</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_high_beta</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_zero_rate</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_params.set_params_normal</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_unnormalized</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_zero_quat</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_null_output</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_null_input</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_compound</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_45</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_z_180</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_gimbal_lock</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_neg90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_z_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_y_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_rot_x_90</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_euler.euler_identity</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_mag_null_imu</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_mag_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_not_init</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_null_quat</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_null_imu</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_update.update_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_reset.reset_restores_identity</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_double</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_not_init</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_deinit.deinit_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_after_deinit</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_double</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sf_init.init_ok</td>
+                <td>svc_sensor_fusion.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: app_state.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">75</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">75</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.legacy_name</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.can_transition_always</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.set_recording</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_advertising</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_recording_in_lift</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_recording_in_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_legacy.get_idle_in_charging</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_comm_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_session_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_not_called_same_state</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_null_no_crash</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_old_new_correct</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_callback.cb_called_on_change</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.comm_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.session_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.system_name_invalid</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.comm_name_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.session_name_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_name.system_name_active</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_fallback</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_lift_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_idle_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_deep_sleep_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_low_power_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_ota_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_lift_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_skiing_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_skiing_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_active_idle_connected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_standby_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_policy.policy_charging_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_charging_no_upgrade</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_active_no_upgrade</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_disconnected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_preserves_existing_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_low_power_upgrades</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_connected_sets_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_comm.comm_connected_upgrades_system</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_same_no_notify</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_ota_to_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_to_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_skiing_to_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_none_in_charging</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_invalid_value</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_auto_upgrade_from_low_power</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_auto_upgrade_from_standby</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_deep_sleep_rejects_non_none</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_charging_rejects_non_none</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_ota</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_none_rejected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_idle_rejected</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_lift_from_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_skiing</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_session.sess_idle</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_get_full</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_publishes_event</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_all_valid_values</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_same_state_no_notify</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_not_initialized</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_invalid_value</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_low_power_keeps_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_standby_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_deep_sleep_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_charging_clears_session</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_system.sys_active</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_init.init_double</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>st_init.init_ok</td>
+                <td>app_state.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: storage_frame.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">31</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">31</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.packed_no_padding</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.with_baro_first_byte</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_layout.imu_only_first_byte</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.pressure_extreme_min</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.pressure_extreme_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.acc_extreme_min</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.acc_extreme_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.delta_ms_boundary_255</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.delta_ms_boundary_0</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.with_baro_fields</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_field.imu_only_fields</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0xff</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0x03</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_invalid_0x00</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_with_baro</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_getsize.getsize_imu_only</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.baro_uint32_max_minus1</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.baro_uint32_max</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_100</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_99</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_10</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_5</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_4</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_3</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_2</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_1</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_baro.should_include_baro_idx_0</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.with_baro_constant</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.imu_only_constant</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.with_baro_size</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>sfr_size.imu_only_size</td>
+                <td>storage_frame.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: lib_ringbuf.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">45</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">45</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_cycle_50</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_read</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_write_when_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_size1.size1_write</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_then_write</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_more_than_available</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_all</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_skip.skip_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_across_wrap</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_null_out</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_then_read</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_peek.peek_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_unaligned</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_batch_5_rounds</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_100_cycles</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_fill_at_boundary</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_wrap.wrap_basic</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_write_read_cycle</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_len_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_null_out</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_more_than_available</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_read.read_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_sequential_fill</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_one_byte</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_len_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_null_data</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_partial</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_when_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_write.write_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_null</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_empty</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_full</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_reset.reset_with_data</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_size_one</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_size_zero</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_null_rb</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>rb_init.init_normal</td>
+                <td>lib_ringbuf.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+            <div class="card">
+                <h3>📋 测试套件: events.unit</h3>
+                <div class="stats-grid">
+                    <div class="stat-item total">
+                        <span class="stat-value">26</span>
+                        <span class="stat-label">测试用例</span>
+                    </div>
+                    <div class="stat-item pass">
+                        <span class="stat-value">26</span>
+                        <span class="stat-label">通过</span>
+                    </div>
+                    <div class="stat-item fail">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">失败</span>
+                    </div>
+                    <div class="stat-item error">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                    <div class="stat-item skip">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">跳过</span>
+                    </div>
+                </div>
+                
+        <table>
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>测试用例名</th>
+                    <th>类名</th>
+                    <th>耗时 (秒)</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_reuse</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_unregister_all</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_slot.slot_full_unregister_reregister</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_no_handlers</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_simple</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_null_event</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_data_passed</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_multi_handlers</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_no_match</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_publish.publish_match</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_stops_delivery</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_then_reregister</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_found_type</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_not_found_handler</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_unregister.unregister_normal</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_duplicate</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_different_types</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_same_type_multi</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_full_16</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_not_initialized</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_null_handler</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_register.register_normal</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_init.init_double_returns_ealready</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td class="status-pass"></td>
+                <td>ev_init.init_returns_zero</td>
+                <td>events.unit</td>
+                <td>0.00</td>
+                <td></td>
+            </tr>
+            </tbody></table>
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <script>
+        function switchPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.container').forEach(function(el) {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+            // 移除所有按钮的激活状态
+            document.querySelectorAll('.nav-links button').forEach(function(el) {
+                el.classList.remove('active');
+            });
+
+            // 显示目标页面
+            const pages = {
+                'summary': 'summary-page',
+                'twister': 'twister-page',
+                'twister_report': 'twister_report-page',
+                'twister_suite_report': 'twister_suite_report-page'
+            };
+            const targetPage = document.getElementById(pages[pageId]);
+            targetPage.style.display = 'block';
+            setTimeout(function() { targetPage.classList.add('active'); }, 10);
+
+            // 激活对应的按钮
+            const btnIndex = { 'summary': 0, 'twister': 1, 'twister_report': 2, 'twister_suite_report': 3 };
+            document.querySelectorAll('.nav-links button')[btnIndex[pageId]].classList.add('active');
+        }
+    </script>
+</body>
+</html>
