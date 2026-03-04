@@ -1,51 +1,51 @@
 # MCU 内存分析报告
 
-生成时间: 2026-02-28 02:01:30
+生成时间: 2026-03-04 08:34:08
 
 ## 1. 内存使用概览
 
 | 内存类型 | 已使用 | 最大值 | 使用率 |
 |---------|--------|--------|--------|
-| Flash (ROM) | 524.8 KB | 1.0 MB | 51.3% |
-| SRAM (RAM) | 145.0 KB | 256.0 KB | 56.7% |
+| Flash (ROM) | 341.9 KB | 1.0 MB | 33.4% |
+| SRAM (RAM) | 182.0 KB | 256.0 KB | 71.1% |
 
 ## 2. 详细分布
 
 | 段 | 大小 |
 |----|------|
-| Code | 442.7 KB |
-| RO Data | 77.9 KB |
-| RW Data | 4.3 KB |
-| ZI Data | 140.7 KB |
+| Code | 294.5 KB |
+| RO Data | 42.5 KB |
+| RW Data | 4.9 KB |
+| ZI Data | 177.1 KB |
 | Heap | 32.0 KB |
-| Stack | 24.6 KB |
+| Stack | 27.6 KB |
 
 ## 3. 段统计 (Top 10)
 
 | 段名 | 大小 |
 |------|------|
-| text | 440.5 KB |
-| noinit | 92.5 KB |
-| rodata | 77.1 KB |
-| bss | 45.3 KB |
-| datas | 4.3 KB |
+| text | 292.3 KB |
+| noinit | 122.6 KB |
+| bss | 52.0 KB |
+| rodata | 42.0 KB |
+| datas | 4.9 KB |
 | sw_isr_table | 2.1 KB |
 | rom_start | 1.1 KB |
-| log_const_area | 752.0 B |
 | device_area | 720.0 B |
-| initlevel | 336.0 B |
+| log_const_area | 560.0 B |
+| initlevel | 320.0 B |
 
 ## 4. 模块统计 (Top 10)
 
 | 模块 | ROM | RAM |
 |------|-----|-----|
-| vice_controller_s140_debug_hardfp__obfuscated.elf) | 61.6 KB | 4.3 KB |
-| zephyr/kernel/libkernel.a(mempool.c.obj) | 598.0 B | 32.0 KB |
-| modules/littlefs/libmodules__littlefs.a(lfs.c.obj) | 24.7 KB | 0.0 B |
-| c__uarp__UARPDK.a(CoreUARPPlatformAccessory.c.obj) | 21.3 KB | 0.0 B |
-| /host/libsubsys__bluetooth__host.a(hci_core.c.obj) | 14.5 KB | 5.3 KB |
-| app/libapp.a(svc_storage.c.obj) | 1.3 KB | 17.3 KB |
+| vice_controller_s140_debug_hardfp__obfuscated.elf) | 59.9 KB | 4.3 KB |
+| zephyr/kernel/libkernel.a(mempool.c.obj) | 574.0 B | 32.0 KB |
+| app/libapp.a(svc_storage.c.obj) | 4.2 KB | 26.4 KB |
+| tooth/host/libsubsys__bluetooth__host.a(att.c.obj) | 10.8 KB | 15.6 KB |
+| ooth/host/libsubsys__bluetooth__host.a(conn.c.obj) | 8.7 KB | 11.9 KB |
+| /host/libsubsys__bluetooth__host.a(hci_core.c.obj) | 13.2 KB | 5.3 KB |
 | at/libmpsl.a(libmpsl_debug_hardfp__obfuscated.elf) | 14.3 KB | 1.8 KB |
 | rt/libsubsys__mgmt__mcumgr__transport.a(smp.c.obj) | 665.0 B | 14.6 KB |
-| tooth/host/libsubsys__bluetooth__host.a(att.c.obj) | 11.0 KB | 3.6 KB |
-| tooth/host/libsubsys__bluetooth__host.a(smp.c.obj) | 12.8 KB | 796.0 B |
+| tooth/host/libsubsys__bluetooth__host.a(buf.c.obj) | 1.0 KB | 13.5 KB |
+| ooth/host/libsubsys__bluetooth__host.a(gatt.c.obj) | 12.4 KB | 658.0 B |
