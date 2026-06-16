@@ -1,14 +1,14 @@
 {
   "stats": {
-    "code": 550417,
-    "ro": 87812,
-    "rw": 5934,
-    "zi": 219277,
+    "code": 549866,
+    "ro": 87992,
+    "rw": 6046,
+    "zi": 219341,
     "heap": 32812,
     "stack": 36408
   },
-  "total_rom": 644163,
-  "total_ram": 225211,
+  "total_rom": 643904,
+  "total_ram": 225387,
   "symbols": [
     {
       "name": "rom_start",
@@ -7355,7 +7355,7 @@
     },
     {
       "name": "text",
-      "size": 1956,
+      "size": 1984,
       "section": "text",
       "object": "app/libapp.a(main.c.obj)",
       "category": "rom"
@@ -7544,13 +7544,6 @@
     },
     {
       "name": "text",
-      "size": 128,
-      "section": "text",
-      "object": "app/libapp.a(app_ski.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "text",
       "size": 132,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
@@ -7607,6 +7600,13 @@
     },
     {
       "name": "text",
+      "size": 128,
+      "section": "text",
+      "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text",
       "size": 212,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
@@ -7614,7 +7614,7 @@
     },
     {
       "name": "text",
-      "size": 984,
+      "size": 844,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -7761,21 +7761,21 @@
     },
     {
       "name": "text",
-      "size": 476,
+      "size": 44,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 588,
+      "size": 404,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 1144,
+      "size": 1264,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7817,7 +7817,7 @@
     },
     {
       "name": "text",
-      "size": 2020,
+      "size": 2028,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7831,7 +7831,7 @@
     },
     {
       "name": "text",
-      "size": 2304,
+      "size": 2312,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7929,14 +7929,14 @@
     },
     {
       "name": "text",
-      "size": 56,
+      "size": 88,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 1680,
+      "size": 1720,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7950,14 +7950,14 @@
     },
     {
       "name": "text",
-      "size": 596,
+      "size": 620,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "text",
-      "size": 996,
+      "size": 780,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -7971,7 +7971,7 @@
     },
     {
       "name": "text",
-      "size": 108,
+      "size": 104,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -11136,6 +11136,13 @@
     {
       "name": "text",
       "size": 32,
+      "section": "text",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "text.dis_set",
+      "size": 312,
       "section": "text",
       "object": "zephyr/libzephyr.a(dis.c.obj)",
       "category": "rom"
@@ -22083,7 +22090,7 @@
     },
     {
       "name": "text",
-      "size": 24,
+      "size": 20,
       "section": "text",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -22272,7 +22279,7 @@
     },
     {
       "name": "text",
-      "size": 68,
+      "size": 74,
       "section": "text",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -35189,6 +35196,13 @@
       "name": "log_const_area",
       "size": 24,
       "section": "log_const_area",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "log_const_area",
+      "size": 24,
+      "section": "log_const_area",
       "object": "zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a(keys.c.obj)",
       "category": "rom"
     },
@@ -35544,13 +35558,6 @@
     },
     {
       "name": "rodata",
-      "size": 26,
-      "section": "rodata",
-      "object": "app/libapp.a(app_ski.c.obj)",
-      "category": "rom"
-    },
-    {
-      "name": "rodata",
       "size": 33,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
@@ -35586,7 +35593,14 @@
     },
     {
       "name": "rodata",
-      "size": 308,
+      "size": 26,
+      "section": "rodata",
+      "object": "app/libapp.a(app_ski.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 268,
       "section": "rodata",
       "object": "app/libapp.a(app_ski.c.obj)",
       "category": "rom"
@@ -35915,21 +35929,21 @@
     },
     {
       "name": "rodata",
-      "size": 74,
+      "size": 34,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 97,
+      "size": 86,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 283,
+      "size": 322,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -36013,6 +36027,13 @@
     },
     {
       "name": "rodata",
+      "size": 36,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
       "size": 63,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
@@ -36027,7 +36048,14 @@
     },
     {
       "name": "rodata",
-      "size": 396,
+      "size": 14,
+      "section": "rodata",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 356,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -36048,7 +36076,7 @@
     },
     {
       "name": "rodata",
-      "size": 232,
+      "size": 138,
       "section": "rodata",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "rom"
@@ -36650,7 +36678,7 @@
     },
     {
       "name": "rodata",
-      "size": 59,
+      "size": 51,
       "section": "rodata",
       "object": "app/libapp.a(svc_power.c.obj)",
       "category": "rom"
@@ -38008,14 +38036,42 @@
     },
     {
       "name": "rodata",
-      "size": 35,
+      "size": 292,
       "section": "rodata",
       "object": "zephyr/libzephyr.a(dis.c.obj)",
       "category": "rom"
     },
     {
       "name": "rodata",
-      "size": 220,
+      "size": 15,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 260,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 4,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 4,
+      "section": "rodata",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "rom"
+    },
+    {
+      "name": "rodata",
+      "size": 4,
       "section": "rodata",
       "object": "zephyr/libzephyr.a(dis.c.obj)",
       "category": "rom"
@@ -43349,7 +43405,7 @@
     },
     {
       "name": "rodata",
-      "size": 10,
+      "size": 6,
       "section": "rodata",
       "object": "src/lib/lib_hg_logger/libhg_logger.a(hg_log_api.c.obj)",
       "category": "rom"
@@ -45750,7 +45806,7 @@
     },
     {
       "name": "data.ad",
-      "size": 24,
+      "size": 32,
       "section": "datas",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "ram"
@@ -45947,6 +46003,41 @@
     {
       "name": "datas",
       "size": 8,
+      "section": "datas",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "datas",
+      "size": 8,
+      "section": "datas",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "datas",
+      "size": 22,
+      "section": "datas",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "datas",
+      "size": 22,
+      "section": "datas",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "datas",
+      "size": 22,
+      "section": "datas",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "datas",
+      "size": 22,
       "section": "datas",
       "object": "zephyr/libzephyr.a(dis.c.obj)",
       "category": "ram"
@@ -47290,7 +47381,7 @@
     },
     {
       "name": "bss",
-      "size": 48,
+      "size": 56,
       "section": "bss",
       "object": "app/libapp.a(svc_ble.c.obj)",
       "category": "ram"
@@ -47843,6 +47934,13 @@
     },
     {
       "name": "bss",
+      "size": 32,
+      "section": "bss",
+      "object": "app/libapp.a(svc_ble.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
       "size": 44,
       "section": "bss",
       "object": "app/libapp.a(svc_ble_gatt.c.obj)",
@@ -48322,6 +48420,13 @@
       "size": 4,
       "section": "bss",
       "object": "zephyr/libzephyr.a(task_wdt.c.obj)",
+      "category": "ram"
+    },
+    {
+      "name": "bss",
+      "size": 22,
+      "section": "bss",
+      "object": "zephyr/libzephyr.a(dis.c.obj)",
       "category": "ram"
     },
     {
@@ -50569,7 +50674,7 @@
     },
     "app/libapp.a(main.c.obj)": {
       "name": "app/libapp.a(main.c.obj)",
-      "rom": 5645,
+      "rom": 5673,
       "ram": 524
     },
     "app/libapp.a(app_state.c.obj)": {
@@ -50579,7 +50684,7 @@
     },
     "app/libapp.a(app_ski.c.obj)": {
       "name": "app/libapp.a(app_ski.c.obj)",
-      "rom": 5267,
+      "rom": 5083,
       "ram": 148
     },
     "app/libapp.a(pb_encode.c.obj)": {
@@ -50589,8 +50694,8 @@
     },
     "app/libapp.a(svc_ble.c.obj)": {
       "name": "app/libapp.a(svc_ble.c.obj)",
-      "rom": 18087,
-      "ram": 281
+      "rom": 17393,
+      "ram": 329
     },
     "app/libapp.a(svc_ble_cmd.c.obj)": {
       "name": "app/libapp.a(svc_ble_cmd.c.obj)",
@@ -50629,7 +50734,7 @@
     },
     "app/libapp.a(svc_power.c.obj)": {
       "name": "app/libapp.a(svc_power.c.obj)",
-      "rom": 2123,
+      "rom": 2115,
       "ram": 2372
     },
     "app/libapp.a(svc_ota.c.obj)": {
@@ -50824,8 +50929,8 @@
     },
     "zephyr/libzephyr.a(dis.c.obj)": {
       "name": "zephyr/libzephyr.a(dis.c.obj)",
-      "rom": 427,
-      "ram": 47
+      "rom": 1087,
+      "ram": 165
     },
     "zephyr/libzephyr.a(tps.c.obj)": {
       "name": "zephyr/libzephyr.a(tps.c.obj)",
@@ -51639,7 +51744,7 @@
     },
     "src/lib/lib_hg_logger/libhg_logger.a(hg_log_api.c.obj)": {
       "name": "src/lib/lib_hg_logger/libhg_logger.a(hg_log_api.c.obj)",
-      "rom": 875,
+      "rom": 871,
       "ram": 3484
     },
     "src/lib/lib_hg_logger/libhg_logger.a(hg_log_output.c.obj)": {
@@ -52490,7 +52595,7 @@
     },
     "text": {
       "name": "text",
-      "size": 527456
+      "size": 527056
     },
     "initlevel": {
       "name": "initlevel",
@@ -52506,7 +52611,7 @@
     },
     "rodata": {
       "name": "rodata",
-      "size": 87260
+      "size": 87440
     },
     "ramfunc": {
       "name": "ramfunc",
@@ -52514,7 +52619,7 @@
     },
     "datas": {
       "name": "datas",
-      "size": 5934
+      "size": 6046
     },
     "sw_isr_table": {
       "name": "sw_isr_table",
@@ -52550,11 +52655,11 @@
     },
     "log_fmt": {
       "name": "log_fmt",
-      "size": 128714
+      "size": 127306
     },
     "hg_log_fmt": {
       "name": "hg_log_fmt",
-      "size": 20613
+      "size": 20462
     },
     "last_section": {
       "name": "last_section",
@@ -52562,7 +52667,7 @@
     },
     "bss": {
       "name": "bss",
-      "size": 79415
+      "size": 79479
     },
     "noinit": {
       "name": "noinit",
