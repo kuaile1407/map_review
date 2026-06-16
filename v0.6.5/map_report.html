@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCU Map Analyzer Pro Plus v2.1</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h1 .version {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            font-weight: normal;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        .nav-links button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 15px;
+            padding: 8px 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links button.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: none;
+        }
+
+        .container.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-title {
+            margin: 0 0 1rem 0;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .memory-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .memory-bar-container {
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 30px;
+            margin: 0.5rem 0;
+        }
+
+        .memory-bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: width 0.5s ease;
+        }
+
+        .memory-bar.rom {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+
+        .memory-bar.ram {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-item .label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            cursor: pointer;
+            user-select: none;
+            position: sticky;
+            top: 0;
+        }
+
+        th:hover {
+            background: #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        code {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+        }
+
+        .tab-container {
+            margin-top: 1rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #dee2e6;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .suggestions li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+
+        .suggestions li.success {
+            border-left-color: var(--success-color);
+            background: #d4edda;
+        }
+
+        .suggestions li.warning {
+            border-left-color: var(--warning-color);
+            background: #fff3cd;
+        }
+
+        .suggestions li.danger {
+            border-left-color: var(--danger-color);
+            background: #f8d7da;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        #memoryChart {
+            max-width: 400px;
+        }
+
+        #chart-legend {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links button {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🔬 MCU Map Analyzer <span class="version">Pro Plus v2.1</span></h1>
+        <div class="nav-links">
+            <button class="active" onclick="switchPage('home')">📊 分析主页</button>
+            <button onclick="switchPage('doc')">📚 优化指南</button>
+            <button onclick="switchPage('advanced')">🎯 高级分析</button>
+        </div>
+    </nav>
+
+    <div id="home-page" class="container active">
+        <div class="card">
+            <h2 class="card-title">📈 内存使用概览</h2>
+            <div class="memory-overview">
+                <div>
+                    <strong>💾 Flash (ROM)</strong>
+                    <div class="memory-bar-container">
+                        <div class="memory-bar rom" id="bar-rom" style="width: 61.4%">
+                            <span id="pct-rom">61.4%</span>
+                        </div>
+                    </div>
+                    <small>628.8 KB / <span id="label-max-rom">1024</span> KB</small>
+                </div>
+                <div>
+                    <strong>🧠 SRAM (RAM)</strong>
+                    <div class="memory-bar-container">
+                        <div class="memory-bar ram" id="bar-ram" style="width: 86.0%">
+                            <span id="pct-ram">86.0%</span>
+                        </div>
+                    </div>
+                    <small>220.1 KB / <span id="label-max-ram">256</span> KB</small>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="label">Code</div>
+                    <div class="value">537.0 KB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">RO Data</div>
+                    <div class="value">85.9 KB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">RW Data</div>
+                    <div class="value">5.9 KB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">ZI Data</div>
+                    <div class="value">214.2 KB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Heap</div>
+                    <div class="value">32.0 KB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="label">Stack</div>
+                    <div class="value">35.6 KB</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">💡 AI 智能建议</h2>
+            <ul class="suggestions">
+                <li class="success"><span style="font-size: 1.2rem;">✅</span> Flash 使用率 61.4% 处于合理范围</li>
+<li class="warning"><span style="font-size: 1.2rem;">⚠️</span> RAM 使用率 86.0% 较高，建议优化内存使用</li>
+
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">📊 内存分布图</h2>
+            <div class="chart-container">
+                <canvas id="memoryChart" width="400" height="400"></canvas>
+                <div id="chart-legend"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">📋 详细数据</h2>
+            <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜索符号、模块或段..." onkeyup="filterTable()">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('rom')">💾 ROM 符号</button>
+                <button class="tab-btn" onclick="switchTab('ram')">🧠 RAM 符号</button>
+                <button class="tab-btn" onclick="switchTab('modules')">📦 模块</button>
+                <button class="tab-btn" onclick="switchTab('sections')">🗂️ 段</button>
+            </div>
+
+            <div id="rom-table-container">
+                <table id="rom-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('rom-table', 0)">符号名称</th>
+                            <th onclick="sortTable('rom-table', 1)">大小</th>
+                            <th onclick="sortTable('rom-table', 2)">段</th>
+                            <th onclick="sortTable('rom-table', 3)">所在文件</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rom-table-body"></tbody>
+                </table>
+            </div>
+
+            <div id="ram-table-container" style="display:none;">
+                <table id="ram-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('ram-table', 0)">符号名称</th>
+                            <th onclick="sortTable('ram-table', 1)">大小</th>
+                            <th onclick="sortTable('ram-table', 2)">段</th>
+                            <th onclick="sortTable('ram-table', 3)">所在文件</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ram-table-body"></tbody>
+                </table>
+            </div>
+
+            <div id="modules-table-container" style="display:none;">
+                <table id="modules-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('modules-table', 0)">模块名称</th>
+                            <th onclick="sortTable('modules-table', 1)">ROM 用量</th>
+                            <th onclick="sortTable('modules-table', 2)">RAM 用量</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modules-table-body"></tbody>
+                </table>
+            </div>
+
+            <div id="sections-table-container" style="display:none;">
+                <table id="sections-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('sections-table', 0)">段名称</th>
+                            <th onclick="sortTable('sections-table', 1)">大小</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sections-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="doc-page" class="container">
+        <div class="card">
+            <h2 class="card-title">📚 内存优化指南</h2>
+            <p>本页面提供 MCU 内存优化的专业建议，帮助您在有限资源内实现更多功能。</p>
+
+            <h3>🎯 Flash (ROM) 优化策略</h3>
+            <ul>
+                <li><strong>编译器优化级别</strong>：使用 -Os 优化代码大小而非速度</li>
+                <li><strong>移除调试信息</strong>：Release 构建中移除 -g 选项</li>
+                <li><strong>精简库函数</strong>：使用轻量级替代方案（如 tiny-printf）</li>
+                <li><strong>压缩常量数据</strong>：对大型常量数组使用压缩算法</li>
+            </ul>
+
+            <h3>🎯 RAM 优化策略</h3>
+            <ul>
+                <li><strong>减少全局变量</strong>：尽量使用局部变量</li>
+                <li><strong>优化缓冲区大小</strong>：根据实际需求调整缓冲区</li>
+                <li><strong>使用动态内存</strong>：按需分配，及时释放</li>
+                <li><strong>合并重复数据</strong>：使用字符串池等技术</li>
+            </ul>
+
+            <h3>🎯 Stack 优化策略</h3>
+            <ul>
+                <li><strong>避免深层递归</strong>：使用迭代替代递归</li>
+                <li><strong>减少大局部变量</strong>：大数组应使用全局或动态分配</li>
+                <li><strong>检查中断栈</strong>：确保中断处理函数足够精简</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="advanced-page" class="container">
+        <div class="card">
+            <h2 class="card-title">🎯 高级分析</h2>
+            <h3>📊 内存统计详情</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>大小</th>
+                        <th>ROM 占比</th>
+                        <th>RAM 占比</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Code</td><td>537.0 KB</td><td>85.4%</td><td>-</td></tr>
+                    <tr><td>RO Data</td><td>85.9 KB</td><td>13.7%</td><td>-</td></tr>
+                    <tr><td>RW Data</td><td>5.9 KB</td><td>0.9%</td><td>2.7%</td></tr>
+                    <tr><td>ZI Data</td><td>214.2 KB</td><td>-</td><td>97.3%</td></tr>
+                    <tr><td>Heap</td><td>32.0 KB</td><td>-</td><td>14.6%</td></tr>
+                    <tr><td>Stack</td><td>35.6 KB</td><td>-</td><td>16.2%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        const romSymbols = [{"name": "text", "size": 7212, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "rodata", "size": 5632, "section": "rodata", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "text", "size": 5132, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text._dtoa_r", "size": 3156, "section": "text", "object": "m.main+fp/hard/libc_nano.a(lib_a-dtoa.o)"}, {"name": "text", "size": 2576, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 2312, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 2116, "section": "text", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "text", "size": 2028, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 1984, "section": "text", "object": "app/libapp.a(main.c.obj)"}, {"name": "text", "size": 1924, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 1720, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 1716, "section": "text", "object": "hyr/libzephyr.a(cbprintf_complete.c.obj)"}, {"name": "text.main", "size": 1556, "section": "text", "object": "app/libapp.a(main.c.obj)"}, {"name": "text", "size": 1556, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 1528, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 1500, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 1420, "section": "text", "object": "hyr/libzephyr.a(cbprintf_packaged.c.obj)"}, {"name": "text", "size": 1416, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 1372, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 1336, "section": "text", "object": "hyr/libzephyr.a(cbprintf_packaged.c.obj)"}, {"name": "text", "size": 1332, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 1320, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 1264, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 1232, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "rodata", "size": 1208, "section": "rodata", "object": "r/libmodules__segger.a(SEGGER_RTT.c.obj)"}, {"name": "text", "size": 1188, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 1156, "section": "text", "object": "at/liboberon_3.0.17.a(ocrypto_aes.s.obj)"}, {"name": "text", "size": 1128, "section": "text", "object": "liboberon_3.0.17.a(ocrypto_sha256.c.obj)"}, {"name": "text", "size": 1104, "section": "text", "object": "m/core/libarch__arm__core.a(fatal.c.obj)"}, {"name": "rom_start", "size": 1084, "section": "rom_start", "object": "eFiles/zephyr_final.dir/isr_tables.c.obj"}, {"name": "text", "size": 1076, "section": "text", "object": "oberon_3.0.17.a(ocrypto_bigint256.s.obj)"}, {"name": "text", "size": 1064, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 1060, "section": "text", "object": ".main+fp/hard/libgcc.a(_arm_muldivdf3.o)"}, {"name": "text", "size": 1052, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text", "size": 1016, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 1016, "section": "text", "object": "hyr/libzephyr.a(cbprintf_complete.c.obj)"}, {"name": "text", "size": 1012, "section": "text", "object": "libsubsys__bluetooth__host.a(keys.c.obj)"}, {"name": "rodata", "size": 985, "section": "rodata", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 980, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 952, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 940, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 932, "section": "text", "object": "zephyr/libzephyr.a(onoff.c.obj)"}, {"name": "text", "size": 924, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 920, "section": "text", "object": "t__mcumgr__grp__os_mgmt.a(os_mgmt.c.obj)"}, {"name": "rodata", "size": 914, "section": "rodata", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "rodata", "size": 914, "section": "rodata", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "rodata", "size": 914, "section": "rodata", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "rodata", "size": 914, "section": "rodata", "object": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)"}, {"name": "text", "size": 908, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 892, "section": "text", "object": "oberon_3.0.17.a(ocrypto_bigint224.s.obj)"}, {"name": "text", "size": 888, "section": "text", "object": ".main+fp/hard/libgcc.a(_arm_addsubdf3.o)"}, {"name": "rodata", "size": 888, "section": "rodata", "object": "_ports__zephyr.a(memfault_metrics.c.obj)"}, {"name": "text", "size": 856, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 852, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 848, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 848, "section": "text", "object": "iboberon_3.0.17.a(ocrypto_sc_p256.c.obj)"}, {"name": "text", "size": 844, "section": "text", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 840, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 832, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 828, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 820, "section": "text", "object": "eron_3.0.17.a(ocrypto_sha256_loop.s.obj)"}, {"name": "text", "size": 804, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 804, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 800, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 792, "section": "text", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "rodata", "size": 790, "section": "rodata", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 780, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 756, "section": "text", "object": "oberon_3.0.17.a(ocrypto_gf128_mul.s.obj)"}, {"name": "text", "size": 752, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 748, "section": "text", "object": "libdrivers__pinctrl.a(pinctrl_nrf.c.obj)"}, {"name": "rodata", "size": 748, "section": "rodata", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "rodata", "size": 748, "section": "rodata", "object": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)"}, {"name": "rodata", "size": 748, "section": "rodata", "object": "vers__regulator.a(regulator_fixed.c.obj)"}, {"name": "rodata", "size": 748, "section": "rodata", "object": "rs__regulator.a(regulator_npm13xx.c.obj)"}, {"name": "rodata", "size": 748, "section": "rodata", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "text", "size": 744, "section": "text", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "text", "size": 736, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 732, "section": "text", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "text", "size": 728, "section": "text", "object": "eron_3.0.17.a(ocrypto_hmac_sha256.c.obj)"}, {"name": "text", "size": 712, "section": "text", "object": "app/libapp.a(drv_imu.c.obj)"}, {"name": "text", "size": 710, "section": "text", "object": "etooth__controller.a(hci_internal.c.obj)"}, {"name": "text", "size": 708, "section": "text", "object": "les__hal_nordic__nrfx.a(nrfx_twim.c.obj)"}, {"name": "text", "size": 688, "section": "text", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "text", "size": 672, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 668, "section": "text", "object": "8-m.main+fp/hard/libgcc.a(_udivmoddi4.o)"}, {"name": "text", "size": 668, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 660, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 652, "section": "text", "object": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)"}, {"name": "text", "size": 648, "section": "text", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "text", "size": 644, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 636, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 636, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 632, "section": "text", "object": "app/libapp.a(app_state.c.obj)"}, {"name": "text", "size": 628, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 628, "section": "text", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "text", "size": 624, "section": "text", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "rodata", "size": 621, "section": "rodata", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "rodata", "size": 621, "section": "rodata", "object": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)"}, {"name": "rodata", "size": 621, "section": "rodata", "object": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)"}, {"name": "text", "size": 620, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 620, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 616, "section": "text", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "text", "size": 616, "section": "text", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "text", "size": 616, "section": "text", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "text", "size": 612, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 610, "section": "text", "object": "zephyr/libzephyr.a(nvs.c.obj)"}, {"name": "text", "size": 608, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 600, "section": "text", "object": "les__hal_nordic__nrfx.a(nrfx_twim.c.obj)"}, {"name": "text", "size": 596, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 596, "section": "text", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "text", "size": 596, "section": "text", "object": "etooth__controller.a(hci_internal.c.obj)"}, {"name": "text", "size": 588, "section": "text", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "text", "size": 584, "section": "text", "object": "zephyr/kernel/libkernel.a(timer.c.obj)"}, {"name": "text", "size": 576, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 576, "section": "text", "object": "hyr.a(memfault_platform_debug_log.c.obj)"}, {"name": "text", "size": 572, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 568, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "rodata", "size": 568, "section": "rodata", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 560, "section": "text", "object": "app/libapp.a(factory_nvs.c.obj)"}, {"name": "text", "size": 560, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 560, "section": "text", "object": "zephyr/kernel/libkernel.a(mutex.c.obj)"}, {"name": "text", "size": 560, "section": "text", "object": "zephyr/kernel/libkernel.a(work.c.obj)"}, {"name": "text", "size": 556, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 556, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 556, "section": "text", "object": "npm13xx_charger.a(npm13xx_charger.c.obj)"}, {"name": "text", "size": 556, "section": "text", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "text", "size": 552, "section": "text", "object": "app/libapp.a(svc_ble_status.c.obj)"}, {"name": "text", "size": 552, "section": "text", "object": "/libsubsys__bluetooth__host.a(adv.c.obj)"}, {"name": "text", "size": 548, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 548, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 548, "section": "text", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text", "size": 544, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 544, "section": "text", "object": "zephyr/libzephyr.a(mpsc_pbuf.c.obj)"}, {"name": "rodata", "size": 544, "section": "rodata", "object": "app/libapp.a(main.c.obj)"}, {"name": "text", "size": 540, "section": "text", "object": ".main+fp/hard/libgcc.a(_arm_addsubsf3.o)"}, {"name": "text", "size": 540, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 540, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 540, "section": "text", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "text", "size": 540, "section": "text", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "text", "size": 536, "section": "text", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "text", "size": 536, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "text", "size": 532, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 528, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "text", "size": 524, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 524, "section": "text", "object": "zephyr/kernel/libkernel.a(msg_q.c.obj)"}, {"name": "text", "size": 520, "section": "text", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "text", "size": 516, "section": "text", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 516, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 516, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 516, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 512, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 512, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 512, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 512, "section": "text", "object": "cracen/libcracen_psa_driver.a(kmu.c.obj)"}, {"name": "rodata", "size": 512, "section": "rodata", "object": "ts__zephyr.a(memfault_crc16_ccitt.c.obj)"}, {"name": "text", "size": 508, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 508, "section": "text", "object": "app/libapp.a(app_state.c.obj)"}, {"name": "text", "size": 508, "section": "text", "object": "zephyr/libzephyr.a(device_runtime.c.obj)"}, {"name": "text", "size": 508, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 504, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 504, "section": "text", "object": "zephyr/kernel/libkernel.a(msg_q.c.obj)"}, {"name": "text", "size": 500, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 492, "section": "text", "object": "on_3.0.17.a(ocrypto_mod_p256_base.s.obj)"}, {"name": "text", "size": 492, "section": "text", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "text", "size": 492, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 488, "section": "text", "object": "app/libapp.a(factory_nvs.c.obj)"}, {"name": "text", "size": 488, "section": "text", "object": "zephyr/kernel/libkernel.a(timeout.c.obj)"}, {"name": "text", "size": 484, "section": "text", "object": "lib/net_buf/liblib__net_buf.a(buf.c.obj)"}, {"name": "text", "size": 480, "section": "text", "object": "ibsubsys__bluetooth__host.a(l2cap.c.obj)"}, {"name": "rodata", "size": 475, "section": "rodata", "object": "yr/kernel/libkernel.a(timeslicing.c.obj)"}, {"name": "text", "size": 472, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text", "size": 472, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 472, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 472, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 472, "section": "text", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "text", "size": 468, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 460, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 452, "section": "text", "object": "app/libapp.a(ble_protocol.c.obj)"}, {"name": "rodata", "size": 452, "section": "rodata", "object": "arch__arm__core__cortex_m.a(fault.c.obj)"}, {"name": "text", "size": 448, "section": "text", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "text", "size": 440, "section": "text", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "text", "size": 432, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 432, "section": "text", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 432, "section": "text", "object": "app/libapp.a(ble_protocol.c.obj)"}, {"name": "text", "size": 432, "section": "text", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "text", "size": 432, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 428, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 428, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 428, "section": "text", "object": "libarch__arm__core__mpu.a(arm_mpu.c.obj)"}, {"name": "text", "size": 428, "section": "text", "object": "liboberon_3.0.17.a(ocrypto_sha256.c.obj)"}, {"name": "text", "size": 424, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 424, "section": "text", "object": "psl__flash_sync.a(flash_sync_mpsl.c.obj)"}, {"name": "text", "size": 424, "section": "text", "object": "zephyr/kernel/libkernel.a(thread.c.obj)"}, {"name": "text", "size": 424, "section": "text", "object": "boberon_3.0.17.a(ocrypto_mod_p224.c.obj)"}, {"name": "text.atanf", "size": 424, "section": "text", "object": "ain+fp/hard/libm_nano.a(lib_a-sf_atan.o)"}, {"name": "text", "size": 420, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 420, "section": "text", "object": "hyr/libzephyr.a(app_event_manager.c.obj)"}, {"name": "text", "size": 420, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 416, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "vers__regulator.a(regulator_fixed.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "rs__regulator.a(regulator_npm13xx.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "text", "size": 416, "section": "text", "object": "liboberon_3.0.17.a(ocrypto_sha256.c.obj)"}, {"name": "text", "size": 412, "section": "text", "object": "app/libapp.a(pb_encode.c.obj)"}, {"name": "text", "size": 412, "section": "text", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "text", "size": 412, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 412, "section": "text", "object": "zephyr/kernel/libkernel.a(mutex.c.obj)"}, {"name": "text", "size": 412, "section": "text", "object": "findmy/lib/libfmna.a(fmna_storage.c.obj)"}, {"name": "rodata", "size": 410, "section": "rodata", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 408, "section": "text", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 408, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "rodata", "size": 406, "section": "rodata", "object": "m/core/libarch__arm__core.a(fatal.c.obj)"}, {"name": "text", "size": 404, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 404, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 404, "section": "text", "object": "zephyr/libzephyr.a(heap.c.obj)"}, {"name": "text.ccc_set", "size": 404, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 404, "section": "text", "object": "zephyr/kernel/libkernel.a(timeout.c.obj)"}, {"name": "text", "size": 404, "section": "text", "object": "lib_findmy/lib/libfmna.a(fmna_adv.c.obj)"}, {"name": "text", "size": 400, "section": "text", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "text", "size": 400, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "rodata", "size": 400, "section": "rodata", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "text", "size": 398, "section": "text", "object": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)"}, {"name": "rodata", "size": 398, "section": "rodata", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 396, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text", "size": 396, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "rodata", "size": 396, "section": "rodata", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 392, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 392, "section": "text", "object": "app/libapp.a(svc_watchdog.c.obj)"}, {"name": "text", "size": 392, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 392, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "rodata", "size": 391, "section": "rodata", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "text", "size": 388, "section": "text", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "rodata", "size": 388, "section": "rodata", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 386, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 384, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "zephyr/libzephyr.a(fcb_append.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "zephyr/libzephyr.a(log_msg.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "kernel/libkernel.a(thread_monitor.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 384, "section": "text", "object": "findmy/lib/libfmna.a(fmna_storage.c.obj)"}, {"name": "text", "size": 380, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 380, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 380, "section": "text", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "rodata", "size": 380, "section": "rodata", "object": "racen_psa_driver.a(key_management.c.obj)"}, {"name": "text", "size": 378, "section": "text", "object": "hyr/libzephyr.a(cbprintf_complete.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "r__grp__img_mgmt.a(img_mgmt_state.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "zephyr/kernel/libkernel.a(events.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "cracen/libcracen_psa_driver.a(kmu.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text", "size": 376, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "text", "size": 372, "section": "text", "object": "app/libapp.a(svc_sensor_fusion.c.obj)"}, {"name": "text", "size": 372, "section": "text", "object": "zephyr/libzephyr.a(nvs.c.obj)"}, {"name": "text", "size": 368, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 368, "section": "text", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "text", "size": 368, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 364, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 364, "section": "text", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "text", "size": 364, "section": "text", "object": "npm13xx_charger.a(npm13xx_charger.c.obj)"}, {"name": "text", "size": 364, "section": "text", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text", "size": 364, "section": "text", "object": "beron_3.0.17.a(ocrypto_curve_p256.c.obj)"}, {"name": "rodata", "size": 363, "section": "rodata", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "text", "size": 362, "section": "text", "object": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)"}, {"name": "text", "size": 362, "section": "text", "object": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 360, "section": "text", "object": "on_3.0.17.a(ocrypto_mod_p224_base.s.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "zephyr/libzephyr.a(onoff.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "t/libsubsys__bluetooth__host.a(id.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "ephyr/kernel/libkernel.a(mem_slab.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "zephyr/kernel/libkernel.a(queue.c.obj)"}, {"name": "text", "size": 360, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 356, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 356, "section": "text", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "text", "size": 356, "section": "text", "object": "/libsubsys__bluetooth__host.a(adv.c.obj)"}, {"name": "text", "size": 356, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "rodata", "size": 356, "section": "rodata", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 354, "section": "text", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "text", "size": 352, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 352, "section": "text", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "text", "size": 352, "section": "text", "object": "zephyr/kernel/libkernel.a(condvar.c.obj)"}, {"name": "text", "size": 352, "section": "text", "object": "boberon_3.0.17.a(ocrypto_mod_p256.c.obj)"}, {"name": "rodata", "size": 352, "section": "rodata", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text", "size": 348, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text", "size": 348, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 348, "section": "text", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "text", "size": 344, "section": "text", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "text", "size": 344, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 342, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 342, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 342, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 342, "section": "text", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "text", "size": 340, "section": "text", "object": "arch__arm__core__cortex_m.a(fault.c.obj)"}, {"name": "text", "size": 338, "section": "text", "object": "/libmodules__zcbor.a(zcbor_decode.c.obj)"}, {"name": "text", "size": 336, "section": "text", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "text", "size": 336, "section": "text", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "text", "size": 336, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 336, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 336, "section": "text", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text.setup", "size": 332, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "zephyr/libzephyr.a(mpsc_pbuf.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "t/libsubsys__bluetooth__host.a(id.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "ports__zephyr.a(memfault_coredump.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "zephyr/kernel/libkernel.a(work.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "racen_psa_driver.a(key_management.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "cracen/libcracen_psa_driver.a(kmu.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "beron_3.0.17.a(ocrypto_curve_p224.c.obj)"}, {"name": "text", "size": 332, "section": "text", "object": "s__hal_nordic__nrfx.a(nrfx_gpiote.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "app/libapp.a(main.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 328, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 326, "section": "text", "object": "zephyr.a(memfault_chunk_transport.c.obj)"}, {"name": "text", "size": 326, "section": "text", "object": "/libmodules__zcbor.a(zcbor_decode.c.obj)"}, {"name": "text", "size": 324, "section": "text", "object": "uge.a(libnrf_fuel_gauge__obfuscated.elf)"}, {"name": "text", "size": 324, "section": "text", "object": "ephyr/libzephyr.a(log_backend_rtt.c.obj)"}, {"name": "text", "size": 324, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 324, "section": "text", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "text", "size": 324, "section": "text", "object": "zephyr/kernel/libkernel.a(sem.c.obj)"}, {"name": "text", "size": 324, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "rodata", "size": 322, "section": "rodata", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 320, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 320, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 320, "section": "text", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "text", "size": 320, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "rodata", "size": 320, "section": "rodata", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text.nvs_gc", "size": 318, "section": "text", "object": "zephyr/libzephyr.a(nvs.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "zephyr/libzephyr.a(task_wdt.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "zephyr/libzephyr.a(flash_util.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "/lib/libfmna.a(fmna_serial_number.c.obj)"}, {"name": "text", "size": 316, "section": "text", "object": "zephyr/libzephyr.a(settings_nvs.c.obj)"}, {"name": "rodata", "size": 314, "section": "rodata", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "text.dis_set", "size": 312, "section": "text", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "text", "size": 312, "section": "text", "object": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)"}, {"name": "text", "size": 312, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 312, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 312, "section": "text", "object": "bmbedcrypto.a(memory_buffer_alloc.c.obj)"}, {"name": "rodata", "size": 311, "section": "rodata", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "text", "size": 310, "section": "text", "object": "app/libapp.a(pb_common.c.obj)"}, {"name": "text", "size": 310, "section": "text", "object": "app/libapp.a(ble_protocol.c.obj)"}, {"name": "text", "size": 310, "section": "text", "object": "les__hal_nordic__nrfx.a(nrfx_spim.c.obj)"}, {"name": "rodata", "size": 310, "section": "rodata", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "text", "size": 308, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 308, "section": "text", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "text.le_init", "size": 308, "section": "text", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "text", "size": 308, "section": "text", "object": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)"}, {"name": "text", "size": 308, "section": "text", "object": "n/libcracen_psa_driver.a(ctr_drbg.c.obj)"}, {"name": "rodata", "size": 306, "section": "rodata", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "rodata", "size": 306, "section": "rodata", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "app/libapp.a(pb_encode.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "app/libapp.a(drv_imu.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "hyr.a(memfault_zephyr_ram_regions.c.obj)"}, {"name": "text", "size": 304, "section": "text", "object": "_hal_nordic__nrfx.a(system_nrf54l.c.obj)"}, {"name": "text.__mdiff", "size": 304, "section": "text", "object": ".main+fp/hard/libc_nano.a(lib_a-mprec.o)"}, {"name": "text.powf", "size": 304, "section": "text", "object": "main+fp/hard/libm_nano.a(lib_a-wf_pow.o)"}, {"name": "text", "size": 304, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 302, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 302, "section": "text", "object": "zephyr/libzephyr.a(mpsc_pbuf.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "app/libapp.a(vqf.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "__grp__img_mgmt.a(zephyr_img_mgmt.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 300, "section": "text", "object": "bmbedcrypto.a(memory_buffer_alloc.c.obj)"}, {"name": "text.setup", "size": 300, "section": "text", "object": "cracen/libcracen_psa_driver.a(mac.c.obj)"}, {"name": "text", "size": 298, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 298, "section": "text", "object": "zephyr/libzephyr.a(fcb.c.obj)"}, {"name": "text", "size": 298, "section": "text", "object": "my/lib/libfmna.a(fm_crypto_oberon.c.obj)"}, {"name": "text", "size": 296, "section": "text", "object": "r__grp__img_mgmt.a(img_mgmt_state.c.obj)"}, {"name": "text", "size": 296, "section": "text", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "text", "size": 294, "section": "text", "object": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 292, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 292, "section": "text", "object": "app/libapp.a(app_state.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "zephyr/libzephyr.a(base64.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "zephyr/libzephyr.a(settings.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "arch__arm__core__cortex_m.a(fault.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "r__grp__img_mgmt.a(img_mgmt_state.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "ephyr/kernel/libkernel.a(mem_slab.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "zephyr/kernel/libkernel.a(sem.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "zephyr/kernel/libkernel.a(sem.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)"}, {"name": "text", "size": 292, "section": "text", "object": "etooth__controller.a(hci_internal.c.obj)"}, {"name": "rodata", "size": 292, "section": "rodata", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "rodata", "size": 292, "section": "rodata", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "rodata", "size": 291, "section": "rodata", "object": "app/libapp.a(main.c.obj)"}, {"name": "rodata", "size": 289, "section": "rodata", "object": "b_findmy/lib/libfmna.a(fmna_sound.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 288, "section": "text", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "libarch__arm__core__mpu.a(arm_mpu.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "zephyr/kernel/libkernel.a(mempool.c.obj)"}, {"name": "text", "size": 288, "section": "text", "object": "cen/libcracen_psa_driver.a(common.c.obj)"}, {"name": "rodata", "size": 288, "section": "rodata", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 286, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 284, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "app/libapp.a(svc_ble_status.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "zephyr/kernel/libkernel.a(queue.c.obj)"}, {"name": "text", "size": 284, "section": "text", "object": "ers__regulator.a(regulator_common.c.obj)"}, {"name": "text.quorem", "size": 282, "section": "text", "object": "m.main+fp/hard/libc_nano.a(lib_a-dtoa.o)"}, {"name": "text", "size": 280, "section": "text", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 280, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 280, "section": "text", "object": "ibsubsys__bluetooth__host.a(l2cap.c.obj)"}, {"name": "text", "size": 280, "section": "text", "object": "les__hal_nordic__nrfx.a(nrfx_spim.c.obj)"}, {"name": "text", "size": 278, "section": "text", "object": "my/lib/libfmna.a(fm_crypto_oberon.c.obj)"}, {"name": "text", "size": 276, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 276, "section": "text", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "text", "size": 276, "section": "text", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "text", "size": 276, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 276, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 276, "section": "text", "object": "rmware-sdk.a(memfault_ncs_metrics.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "8-m.main+fp/hard/libgcc.a(_arm_cmpdf2.o)"}, {"name": "text", "size": 272, "section": "text", "object": "app/libapp.a(factory_nvs.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "arch__arm__core__cortex_m.a(fault.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 272, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 268, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 268, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 268, "section": "text", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 268, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "t/libsubsys__bluetooth__host.a(id.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "yr/kernel/libkernel.a(timeslicing.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "zephyr/kernel/libkernel.a(timer.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "ger/libhg_logger.a(hg_compact_log.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "text", "size": 268, "section": "text", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "rodata", "size": 268, "section": "rodata", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "zephyr/kernel/libkernel.a(work.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "app/libapp.a(ble_status_proto.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "hyr/libzephyr.a(app_event_manager.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "npm13xx_charger.a(npm13xx_charger.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "npm13xx_charger.a(npm13xx_charger.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "zephyr.a(nrfx_pmu_reboot_tracking.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "ger/libhg_logger.a(hg_compact_log.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "text", "size": 264, "section": "text", "object": "les__hal_nordic__nrfx.a(nrfx_spim.c.obj)"}, {"name": "rodata", "size": 263, "section": "rodata", "object": "ogger/libhg_logger.a(hg_log_flash.c.obj)"}, {"name": "rodata", "size": 263, "section": "rodata", "object": "/lib/libfmna.a(fmna_serial_number.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 260, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 260, "section": "text", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "app/libapp.a(events.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "ules__hal_nordic__nrfx.a(nrfx_pwm.c.obj)"}, {"name": "text", "size": 260, "section": "text", "object": "acen_psa_driver.a(cracen_mac_cmac.c.obj)"}, {"name": "rodata", "size": 260, "section": "rodata", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "rodata", "size": 260, "section": "rodata", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "rodata", "size": 259, "section": "rodata", "object": "arch__arm__core__cortex_m.a(fault.c.obj)"}, {"name": "rodata", "size": 258, "section": "rodata", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "text", "size": 256, "section": "text", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "zephyr/libzephyr.a(mpsc_pbuf.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "r__grp__img_mgmt.a(img_mgmt_state.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "text", "size": 256, "section": "text", "object": "vers__regulator.a(regulator_fixed.c.obj)"}];
+        const ramSymbols = [{"name": "noinit", "size": 32768, "section": "noinit", "object": "zephyr/kernel/libkernel.a(mempool.c.obj)"}, {"name": "bss", "size": 16384, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "noinit", "size": 12504, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "noinit", "size": 12288, "section": "noinit", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "noinit", "size": 10460, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "noinit", "size": 10420, "section": "noinit", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "noinit", "size": 9900, "section": "noinit", "object": "ys__mgmt__mcumgr__transport.a(smp.c.obj)"}, {"name": "noinit", "size": 8192, "section": "noinit", "object": "/kernel/libkernel.a(system_work_q.c.obj)"}, {"name": "bss", "size": 5962, "section": "bss", "object": "luetooth__controller.a(hci_driver.c.obj)"}, {"name": "bss", "size": 5128, "section": "bss", "object": "app/libapp.a(svc_ble_status.c.obj)"}, {"name": "noinit", "size": 4608, "section": "noinit", "object": "ys__mgmt__mcumgr__transport.a(smp.c.obj)"}, {"name": "bss.buf32", "size": 4096, "section": "bss", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "bss", "size": 4096, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 4096, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "noinit", "size": 4096, "section": "noinit", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "noinit", "size": 4096, "section": "noinit", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "bss", "size": 3320, "section": "bss", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "noinit", "size": 2560, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 2440, "section": "bss", "object": "_logger/libhg_logger.a(hg_log_api.c.obj)"}, {"name": "sw_isr_table", "size": 2168, "section": "sw_isr_table", "object": "eFiles/zephyr_final.dir/isr_tables.c.obj"}, {"name": "bss", "size": 2144, "section": "bss", "object": "ger/libhg_logger.a(hg_compact_log.c.obj)"}, {"name": "noinit", "size": 2104, "section": "noinit", "object": "subsys__bluetooth__host.a(long_wq.c.obj)"}, {"name": "bss", "size": 2048, "section": "bss", "object": "_ports__zephyr.a(memfault_logging.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "app/libapp.a(svc_ble_status.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "noinit", "size": 2048, "section": "noinit", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "bss", "size": 1860, "section": "bss", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "bss", "size": 1600, "section": "bss", "object": "ger/libhg_logger.a(hg_compact_log.c.obj)"}, {"name": "bss", "size": 1412, "section": "bss", "object": "core.a(psa_crypto_slot_management.c.obj)"}, {"name": "bss", "size": 1400, "section": "bss", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "noinit", "size": 1394, "section": "noinit", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "noinit", "size": 1394, "section": "noinit", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "bss", "size": 1024, "section": "bss", "object": "__zephyr.a(memfault_platform_core.c.obj)"}, {"name": "noinit", "size": 1024, "section": "noinit", "object": "f__subsys__mpsl__init.a(mpsl_init.c.obj)"}, {"name": "noinit", "size": 1024, "section": "noinit", "object": "_logger/libhg_logger.a(hg_log_api.c.obj)"}, {"name": "bss.cmd_ctx", "size": 896, "section": "bss", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "bss", "size": 840, "section": "bss", "object": "emfault_platform_coredump_regions.c.obj)"}, {"name": "noinit", "size": 800, "section": "noinit", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "noinit", "size": 800, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 752, "section": "bss", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "noinit", "size": 672, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "bss.gatt_ctx", "size": 584, "section": "bss", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "bss.vqf_ctx", "size": 580, "section": "bss", "object": "app/libapp.a(lib_vqf.c.obj)"}, {"name": "bss.ctx.0", "size": 560, "section": "bss", "object": "__grp__img_mgmt.a(zephyr_img_mgmt.c.obj)"}, {"name": "noinit", "size": 560, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss.agg_ctx", "size": 544, "section": "bss", "object": "app/libapp.a(ble_protocol.c.obj)"}, {"name": "bss", "size": 522, "section": "bss", "object": "luetooth__controller.a(hci_driver.c.obj)"}, {"name": "noinit", "size": 518, "section": "noinit", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "bss", "size": 512, "section": "bss", "object": "app/libapp.a(main.c.obj)"}, {"name": "bss.seq_buf", "size": 512, "section": "bss", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "bss", "size": 512, "section": "bss", "object": "/libmbedtls_zephyr.a(mbedtls_heap.c.obj)"}, {"name": "bss", "size": 512, "section": "bss", "object": "rts__zephyr.a(memfault_heap_stats.c.obj)"}, {"name": "noinit", "size": 512, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 480, "section": "bss", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 432, "section": "bss", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss.ckg_ctx", "size": 392, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "data.bt_dev", "size": 384, "section": "datas", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "bss.key_pool", "size": 368, "section": "bss", "object": "libsubsys__bluetooth__host.a(keys.c.obj)"}, {"name": "noinit", "size": 368, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 344, "section": "bss", "object": "ogger/libhg_logger.a(hg_log_flash.c.obj)"}, {"name": "noinit", "size": 320, "section": "noinit", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "bss", "size": 312, "section": "bss", "object": "ys__mgmt__mcumgr__transport.a(smp.c.obj)"}, {"name": "bss", "size": 312, "section": "bss", "object": "subsys__bluetooth__host.a(long_wq.c.obj)"}, {"name": "bss.bt_workq", "size": 312, "section": "bss", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "bss", "size": 312, "section": "bss", "object": "f__subsys__mpsl__init.a(mpsl_init.c.obj)"}, {"name": "bss", "size": 312, "section": "bss", "object": "/kernel/libkernel.a(system_work_q.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "bss", "size": 280, "section": "bss", "object": "zephyr/kernel/libkernel.a(sched.c.obj)"}, {"name": "data", "size": 276, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 276, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "bss", "size": 272, "section": "bss", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "bss.adv_pool", "size": 264, "section": "bss", "object": "/libsubsys__bluetooth__host.a(adv.c.obj)"}, {"name": "noinit", "size": 258, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "bss", "size": 256, "section": "bss", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "bss", "size": 256, "section": "bss", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "bss.conn_tx", "size": 240, "section": "bss", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss", "size": 216, "section": "bss", "object": "app/libapp.a(events.c.obj)"}, {"name": "bss", "size": 208, "section": "bss", "object": ".a(memfault_custom_data_recording.c.obj)"}, {"name": "bss", "size": 204, "section": "bss", "object": "zephyr.a(memfault_data_source_rle.c.obj)"}, {"name": "bss", "size": 204, "section": "bss", "object": "_ports__zephyr.a(memfault_metrics.c.obj)"}, {"name": "bss", "size": 192, "section": "bss", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "bss", "size": 184, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "noinit", "size": 183, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "bss", "size": 168, "section": "bss", "object": "ibsubsys__bluetooth__host.a(l2cap.c.obj)"}, {"name": "datas", "size": 160, "section": "datas", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "bss", "size": 152, "section": "bss", "object": "app/libapp.a(drv_battery.c.obj)"}, {"name": "bss.line_buf", "size": 151, "section": "bss", "object": "ephyr/libzephyr.a(log_backend_rtt.c.obj)"}, {"name": "data.m_cb", "size": 144, "section": "datas", "object": "les__hal_nordic__nrfx.a(nrfx_grtc.c.obj)"}, {"name": "noinit", "size": 140, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 136, "section": "bss", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "bss.str.3", "size": 129, "section": "bss", "object": "ubsys__bluetooth__common.a(bt_str.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "app/libapp.a(svc_hmi.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "hyr.a(memfault_zephyr_ram_regions.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "hyr.a(memfault_zephyr_ram_regions.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "_ports__zephyr.a(memfault_logging.c.obj)"}, {"name": "bss", "size": 128, "section": "bss", "object": "/libcracen_psa_driver.a(prng_pool.c.obj)"}, {"name": "noinit", "size": 128, "section": "noinit", "object": "ys__mgmt__mcumgr__transport.a(smp.c.obj)"}, {"name": "datas", "size": 120, "section": "datas", "object": "4l15/libsoc__nordic.a(gpiote_nrfx.c.obj)"}, {"name": "datas", "size": 120, "section": "datas", "object": "4l15/libsoc__nordic.a(gpiote_nrfx.c.obj)"}, {"name": "bss", "size": 120, "section": "bss", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "bss.e1", "size": 113, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "drivers__serial.a(uart_nrfx_uarte.c.obj)"}, {"name": "datas", "size": 112, "section": "datas", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "bss", "size": 112, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "bss", "size": 112, "section": "bss", "object": "bcracen_psa_driver.a(pk_baremetal.c.obj)"}, {"name": "noinit", "size": 112, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "data", "size": 108, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "bss.calib", "size": 96, "section": "bss", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "bss.ecc", "size": 96, "section": "bss", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "bss", "size": 96, "section": "bss", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "bss", "size": 96, "section": "bss", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "bss", "size": 96, "section": "bss", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "bss.data", "size": 88, "section": "bss", "object": "clock_control.a(clock_control_nrf.c.obj)"}, {"name": "datas", "size": 84, "section": "datas", "object": "g/libdrivers__watchdog.a(wdt_nrfx.c.obj)"}, {"name": "noinit", "size": 80, "section": "noinit", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss", "size": 72, "section": "bss", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "bss", "size": 72, "section": "bss", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "bss", "size": 72, "section": "bss", "object": "etooth__controller.a(hci_internal.c.obj)"}, {"name": "bss", "size": 72, "section": "bss", "object": "a(memfault_coredump_regions_armv7.c.obj)"}, {"name": "noinit", "size": 72, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "device_states", "size": 68, "section": "device_states", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "bss._context", "size": 68, "section": "bss", "object": "psl__flash_sync.a(flash_sync_mpsl.c.obj)"}, {"name": "data", "size": 64, "section": "datas", "object": "fem_common_debug_hardfp__obfuscated.elf)"}, {"name": "bss._kernel", "size": 64, "section": "bss", "object": "zephyr/kernel/libkernel.a(init.c.obj)"}, {"name": "bss.prng", "size": 64, "section": "bss", "object": "n/libcracen_psa_driver.a(ctr_drbg.c.obj)"}, {"name": "bss", "size": 64, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "bss", "size": 64, "section": "bss", "object": "zephyr/libzephyr.a(settings_nvs.c.obj)"}, {"name": "bss.pub_key", "size": 64, "section": "bss", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "noinit", "size": 64, "section": "noinit", "object": "__zephyr.a(memfault_platform_core.c.obj)"}, {"name": "bss", "size": 60, "section": "bss", "object": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)"}, {"name": "bss", "size": 57, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "k_timer_area", "size": 56, "section": "k_timer_area", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "bss", "size": 56, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss", "size": 56, "section": "bss", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "bss.timer", "size": 56, "section": "bss", "object": "zephyr/libzephyr.a(task_wdt.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "ys__mgmt__mcumgr__transport.a(smp.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "k_fifo_area", "size": 52, "section": "k_fifo_area", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "app/libapp.a(svc_findmy.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "t__mcumgr__grp__os_mgmt.a(os_mgmt.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "_grp__os_mgmt.a(os_mgmt_reboot_bt.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "f__subsys__mpsl__init.a(mpsl_init.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "/lib/libfmna.a(fmna_serial_number.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "b_findmy/lib/libfmna.a(fmna_sound.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "datas", "size": 48, "section": "datas", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_ble_cmd.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "bss.channels", "size": 48, "section": "bss", "object": "zephyr/libzephyr.a(task_wdt.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "mfault_platform_bluetooth_metrics.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "flash/libdrivers__flash.a(spi_nor.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "f__subsys__mpsl__init.a(mpsl_init.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "r.a(memfault_coredump_sdk_regions.c.obj)"}, {"name": "bss", "size": 48, "section": "bss", "object": "/libcracen_psa_driver.a(blkcipher.c.obj)"}, {"name": "noinit", "size": 48, "section": "noinit", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "datas", "size": 44, "section": "datas", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "datas", "size": 44, "section": "datas", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "bss", "size": 44, "section": "bss", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "bss", "size": 44, "section": "bss", "object": "__zephyr.a(memfault_event_storage.c.obj)"}, {"name": "bss", "size": 44, "section": "bss", "object": "sdk__ports__zephyr.a(memfault_log.c.obj)"}, {"name": "data.ops.1", "size": 40, "section": "datas", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 40, "section": "bss", "object": "app/libapp.a(svc_power.c.obj)"}, {"name": "bss", "size": 40, "section": "bss", "object": "zephyr.a(memfault_data_packetizer.c.obj)"}, {"name": "bss", "size": 40, "section": "bss", "object": "a(memfault_coredump_regions_armv7.c.obj)"}, {"name": "bss.heap", "size": 40, "section": "bss", "object": "bmbedcrypto.a(memory_buffer_alloc.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "data.sc_ccc", "size": 36, "section": "datas", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "/libsubsys__bluetooth__host.a(smp.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 36, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "bss.leds", "size": 36, "section": "bss", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "data", "size": 32, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data.ad", "size": 32, "section": "datas", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "datas", "size": 32, "section": "datas", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "datas", "size": 32, "section": "datas", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "k_timer_area", "size": 32, "section": "k_timer_area", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "k_timer_area", "size": 32, "section": "k_timer_area", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "k_timer_area", "size": 32, "section": "k_timer_area", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss.state", "size": 32, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss.sn_buf", "size": 32, "section": "bss", "object": "app/libapp.a(factory_nvs.c.obj)"}, {"name": "bss.lbu_data", "size": 32, "section": "bss", "object": "phyr/libzephyr.a(log_backend_uart.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "ger/libhg_logger.a(hg_compact_log.c.obj)"}, {"name": "bss.conns", "size": 32, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "bss.seedk1", "size": 32, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "bss", "size": 32, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)"}, {"name": "bss", "size": 31, "section": "bss", "object": "rmware-sdk.a(memfault_integration.c.obj)"}, {"name": "bss.str.1", "size": 30, "section": "bss", "object": "ubsys__bluetooth__common.a(bt_str.c.obj)"}, {"name": "bss", "size": 29, "section": "bss", "object": "lib_findmy/lib/libfmna.a(fmna_adv.c.obj)"}, {"name": "datas", "size": 28, "section": "datas", "object": "zephyr/libzephyr.a(settings_nvs.c.obj)"}, {"name": "data.auth_cb", "size": 28, "section": "datas", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "k_fifo_area", "size": 28, "section": "k_fifo_area", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "k_fifo_area", "size": 28, "section": "k_fifo_area", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "k_fifo_area", "size": 28, "section": "k_fifo_area", "object": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)"}, {"name": "bss", "size": 28, "section": "bss", "object": "app/libapp.a(app_state.c.obj)"}, {"name": "bss", "size": 28, "section": "bss", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "bss.cancel", "size": 28, "section": "bss", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "bss", "size": 28, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "bss", "size": 28, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "bss", "size": 28, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "datas", "size": 24, "section": "datas", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "datas", "size": 24, "section": "datas", "object": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)"}, {"name": "datas", "size": 24, "section": "datas", "object": "irmware-sdk.a(memfault_bt_metrics.c.obj)"}, {"name": "k_heap_area", "size": 24, "section": "k_heap_area", "object": "zephyr/kernel/libkernel.a(mempool.c.obj)"}, {"name": "k_sem_area", "size": 24, "section": "k_sem_area", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "k_sem_area", "size": 24, "section": "k_sem_area", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "k_sem_area", "size": 24, "section": "k_sem_area", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "k_sem_area", "size": 24, "section": "k_sem_area", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "app/libapp.a(svc_sensor.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "zephyr.a(memfault_log_data_source.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "r.a(memfault_rram_backed_coredump.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "r.a(memfault_rram_backed_coredump.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "yr/kernel/libkernel.a(timeslicing.c.obj)"}, {"name": "bss.drdy_sem", "size": 24, "section": "bss", "object": "app/libapp.a(drv_imu_bsp.c.obj)"}, {"name": "bss.cmd_data", "size": 24, "section": "bss", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "bss.sem_lock", "size": 24, "section": "bss", "object": "ivers__flash.a(soc_flash_nrf_rram.c.obj)"}, {"name": "bss.data1", "size": 24, "section": "bss", "object": "vers__regulator.a(regulator_fixed.c.obj)"}, {"name": "bss.data0", "size": 24, "section": "bss", "object": "vers__regulator.a(regulator_fixed.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "rs__regulator.a(regulator_npm13xx.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "rs__regulator.a(regulator_npm13xx.c.obj)"}, {"name": "bss", "size": 24, "section": "bss", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "noinit", "size": 24, "section": "noinit", "object": "/libsubsys__bluetooth__host.a(buf.c.obj)"}, {"name": "datas", "size": 22, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 22, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 22, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 22, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "bss", "size": 22, "section": "bss", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "data", "size": 20, "section": "datas", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "datas", "size": 20, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "liblib__libc__newlib.a(libc-hooks.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "_logger/libhg_logger.a(hg_log_api.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "cen/libcracen_psa_driver.a(cracen.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "bcracen_psa_driver.a(pk_baremetal.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "n/libcracen_psa_driver.a(cmdma_hw.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "/libcracen_psa_driver.a(prng_pool.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "n/libcracen_psa_driver.a(ctr_drbg.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "ibmbedcrypto_base.a(threading_alt.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "ibmbedcrypto_base.a(threading_alt.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "ibmbedcrypto_base.a(threading_alt.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "eading_lock.a(multithreading_lock.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "__zephyr.a(memfault_platform_lock.c.obj)"}, {"name": "k_mutex_area", "size": 20, "section": "k_mutex_area", "object": "zephyr/libzephyr.a(settings.c.obj)"}, {"name": "bss.adv_name", "size": 20, "section": "bss", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "bss.diag", "size": 20, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 20, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 20, "section": "bss", "object": "libarch__arm__core__mpu.a(arm_mpu.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 17, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "bss", "size": 17, "section": "bss", "object": "fem_common_debug_hardfp__obfuscated.elf)"}, {"name": "datas", "size": 16, "section": "datas", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "data.pwm_seq", "size": 16, "section": "datas", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "data.pwm_seq", "size": 16, "section": "datas", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "hyr/libzephyr.a(app_event_manager.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "t__mcumgr__grp__os_mgmt.a(os_mgmt.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "r__grp__zephyr_basic.a(basic_mgmt.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "ubsys__bluetooth__host.a(settings.c.obj)"}, {"name": "data.tx_work", "size": 16, "section": "datas", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "data.rx_work", "size": 16, "section": "datas", "object": "ubsys__bluetooth__host.a(hci_core.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "libsubsys__bluetooth__host.a(keys.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "rts__zephyr.a(memfault_heap_stats.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "b_findmy/lib/libfmna.a(fmna_state.c.obj)"}, {"name": "datas", "size": 16, "section": "datas", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "k_event_area", "size": 16, "section": "k_event_area", "object": "libcracen_psa_driver.a(interrupts.c.obj)"}, {"name": "k_event_area", "size": 16, "section": "k_event_area", "object": "libcracen_psa_driver.a(interrupts.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "app/libapp.a(app_ski.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "app/libapp.a(svc_sensor_calib.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "app/libapp.a(factory_nvs.c.obj)"}, {"name": "bss.cli.1", "size": 16, "section": "bss", "object": "clock_control.a(clock_control_nrf.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "luetooth__controller.a(hci_driver.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "f__subsys__mpsl__init.a(mpsl_init.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": ".a(memfault_custom_data_recording.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "/libcracen_psa_driver.a(blkcipher.c.obj)"}, {"name": "bss", "size": 16, "section": "bss", "object": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)"}, {"name": "bss.bt_ltk", "size": 16, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "app/libapp.a(svc_ota.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "_grp__os_mgmt.a(os_mgmt_reboot_bt.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "/libsubsys__bluetooth__host.a(att.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 12, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "app/libapp.a(drv_baro.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "ephyr/libzephyr.a(log_backend_rtt.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "phyr/libzephyr.a(log_backend_uart.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "npm13xx_charger.a(npm13xx_charger.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "yr.a(memfault_metrics_reliability.c.obj)"}, {"name": "bss", "size": 12, "section": "bss", "object": "_ports__zephyr.a(memfault_logging.c.obj)"}, {"name": "datas", "size": 10, "section": "datas", "object": "app/libapp.a(drv_imu.c.obj)"}, {"name": "data", "size": 8, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 8, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 8, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 8, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 8, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data.sd", "size": 8, "section": "datas", "object": "app/libapp.a(svc_ble.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "app/libapp.a(svc_ble_gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "app/libapp.a(drv_led.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "phyr/libzephyr.a(log_backend_uart.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(tps.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/libzephyr.a(mds.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "mfault_platform_bluetooth_metrics.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "s__hal_nordic__nrfx.a(nrfx_gpiote.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "zephyr/kernel/libkernel.a(timeout.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "datas", "size": 8, "section": "datas", "object": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_storage.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_button.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "zephyr/libzephyr.a(log_core.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "bss.cc_value", "size": 8, "section": "bss", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ibdrivers__timer.a(nrf_grtc_timer.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ephyr.a(memfault_platform_metrics.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "mfault_platform_bluetooth_metrics.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "zephyr/kernel/libkernel.a(timeout.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "b/libfmna.a(fmna_motion_detection.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "app/libapp.a(svc_sensor_fusion.c.obj)"}, {"name": "bss.seq_buf", "size": 8, "section": "bss", "object": "app/libapp.a(drv_buzzer.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "ephyr/libzephyr.a(log_backend_rtt.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "zephyr/libzephyr.a(settings_store.c.obj)"}, {"name": "bss.eventq", "size": 8, "section": "bss", "object": "hyr/libzephyr.a(app_event_manager.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "subsys__mgmt__mcumgr__mgmt.a(mgmt.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "subsys__mgmt__mcumgr__mgmt.a(mgmt.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "/libsubsys__bluetooth__host.a(ecc.c.obj)"}, {"name": "bss.conn_cbs", "size": 8, "section": "bss", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "libsubsys__bluetooth__host.a(conn.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "libsubsys__bluetooth__host.a(gatt.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "drivers__serial.a(uart_nrfx_uarte.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "rmware-sdk.a(memfault_ncs_metrics.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "_ports__zephyr.a(memfault_logging.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "zephyr/kernel/libkernel.a(work.c.obj)"}, {"name": "bss", "size": 8, "section": "bss", "object": "f_oberon/libpsa_core.a(psa_crypto.c.obj)"}, {"name": "datas", "size": 7, "section": "datas", "object": "zephyr/libzephyr.a(dis.c.obj)"}, {"name": "data", "size": 6, "section": "datas", "object": ".a(libmpsl_debug_hardfp__obfuscated.elf)"}, {"name": "z_devstate", "size": 6, "section": "device_states", "object": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)"}, {"name": "z_devstate", "size": 6, "section": "device_states", "object": "rs__regulator.a(regulator_npm13xx.c.obj)"}, {"name": "bss", "size": 6, "section": "bss", "object": "memfault_ram_reboot_info_tracking.c.obj)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}, {"name": "data", "size": 4, "section": "datas", "object": "oller_s140_debug_hardfp__obfuscated.elf)"}];
+        const modules = [{"name": "oller_s140_debug_hardfp__obfuscated.elf)", "rom": 63107, "ram": 4404}, {"name": "app/libapp.a(svc_storage.c.obj)", "rom": 15548, "ram": 27115}, {"name": "zephyr/kernel/libkernel.a(mempool.c.obj)", "rom": 598, "ram": 32792}, {"name": "/libsubsys__bluetooth__host.a(att.c.obj)", "rom": 11292, "ram": 16276}, {"name": "libsubsys__bluetooth__host.a(conn.c.obj)", "rom": 9790, "ram": 12228}, {"name": "ubsys__bluetooth__host.a(hci_core.c.obj)", "rom": 12366, "ram": 5476}, {"name": "app/libapp.a(svc_ble.c.obj)", "rom": 17393, "ram": 329}, {"name": ".a(libmpsl_debug_hardfp__obfuscated.elf)", "rom": 14682, "ram": 1886}, {"name": "zephyr/kernel/libkernel.a(init.c.obj)", "rom": 939, "ram": 15281}, {"name": "ys__mgmt__mcumgr__transport.a(smp.c.obj)", "rom": 665, "ram": 15000}, {"name": "/libsubsys__bluetooth__host.a(buf.c.obj)", "rom": 1065, "ram": 13873}, {"name": "/libsubsys__bluetooth__host.a(smp.c.obj)", "rom": 13109, "ram": 796}, {"name": "app/libapp.a(svc_ble_cmd.c.obj)", "rom": 8030, "ram": 5042}, {"name": "libsubsys__bluetooth__host.a(gatt.c.obj)", "rom": 11961, "ram": 306}, {"name": "app/libapp.a(drv_battery.c.obj)", "rom": 10886, "ram": 152}, {"name": "app/libapp.a(svc_ble_status.c.obj)", "rom": 3063, "ram": 7176}, {"name": "app/libapp.a(svc_findmy.c.obj)", "rom": 9404, "ram": 255}, {"name": "zephyr/libzephyr.a(log_core.c.obj)", "rom": 2934, "ram": 6618}, {"name": "app/libapp.a(drv_imu_bsp.c.obj)", "rom": 9071, "ram": 41}, {"name": "uge.a(libnrf_fuel_gauge__obfuscated.elf)", "rom": 8884, "ram": 4}, {"name": "luetooth__controller.a(hci_driver.c.obj)", "rom": 2277, "ram": 6506}, {"name": "/kernel/libkernel.a(system_work_q.c.obj)", "rom": 73, "ram": 8504}, {"name": "ndmy/lib/libfmna.a(fmna_gatt_fmns.c.obj)", "rom": 5479, "ram": 3040}, {"name": "zephyr/kernel/libkernel.a(sched.c.obj)", "rom": 7425, "ram": 284}, {"name": "app/libapp.a(drv_baro.c.obj)", "rom": 7356, "ram": 51}, {"name": "nsor__st__lsm6dsv16x.a(lsm6dsv16x.c.obj)", "rom": 5036, "ram": 1514}, {"name": "app/libapp.a(main.c.obj)", "rom": 5673, "ram": 524}, {"name": "app/libapp.a(svc_sensor.c.obj)", "rom": 3427, "ram": 2492}, {"name": "app/libapp.a(svc_sensor_calib.c.obj)", "rom": 5667, "ram": 112}, {"name": "ger/libhg_logger.a(hg_compact_log.c.obj)", "rom": 1990, "ram": 3781}, {"name": "ib_findmy/lib/libfmna.a(fmna_keys.c.obj)", "rom": 5051, "ram": 520}, {"name": "f_oberon/libpsa_core.a(psa_crypto.c.obj)", "rom": 5444, "ram": 8}, {"name": "app/libapp.a(vqf.c.obj)", "rom": 5398, "ram": 0}, {"name": "app/libapp.a(svc_button.c.obj)", "rom": 5181, "ram": 173}, {"name": "i/libdrivers__spi.a(spi_nrfx_spim.c.obj)", "rom": 5030, "ram": 290}, {"name": "app/libapp.a(app_ski.c.obj)", "rom": 5083, "ram": 148}, {"name": "flash/libdrivers__flash.a(spi_nor.c.obj)", "rom": 4922, "ram": 162}, {"name": "s__hal_nordic__nrfx.a(nrfx_gpiote.c.obj)", "rom": 4614, "ram": 8}, {"name": "app/libapp.a(svc_power.c.obj)", "rom": 2115, "ram": 2372}, {"name": "ib_findmy/lib/libfmna.a(fmna_pair.c.obj)", "rom": 3811, "ram": 594}, {"name": "app/libapp.a(svc_ble_gatt.c.obj)", "rom": 3570, "ram": 826}, {"name": "_logger/libhg_logger.a(hg_log_api.c.obj)", "rom": 871, "ram": 3484}, {"name": "/libsubsys__bluetooth__host.a(adv.c.obj)", "rom": 4090, "ram": 264}, {"name": "zephyr/kernel/libkernel.a(work.c.obj)", "rom": 4288, "ram": 12}, {"name": "hyr/libzephyr.a(cbprintf_complete.c.obj)", "rom": 4288, "ram": 0}, {"name": "__lsm6dsv16x.a(lsm6dsv16x_trigger.c.obj)", "rom": 4283, "ram": 0}, {"name": "app/libapp.a(svc_ota.c.obj)", "rom": 4065, "ram": 204}, {"name": "t/libsubsys__bluetooth__host.a(id.c.obj)", "rom": 4197, "ram": 0}, {"name": "b_findmy/lib/libfmna.a(fmna_state.c.obj)", "rom": 3910, "ram": 214}, {"name": "rs__regulator.a(regulator_npm13xx.c.obj)", "rom": 4009, "ram": 54}, {"name": "mfd/libdrivers__mfd.a(mfd_npm13xx.c.obj)", "rom": 3968, "ram": 62}, {"name": "ib_findmy/lib/libfmna.a(fmna_conn.c.obj)", "rom": 3668, "ram": 282}, {"name": "app/libapp.a(drv_buzzer.c.obj)", "rom": 3839, "ram": 96}, {"name": "les__hal_nordic__nrfx.a(nrfx_twim.c.obj)", "rom": 3632, "ram": 0}, {"name": "app/libapp.a(svc_hmi.c.obj)", "rom": 3448, "ram": 128}, {"name": "hyr/libzephyr.a(cbprintf_packaged.c.obj)", "rom": 3546, "ram": 0}, {"name": "lib/lib_findmy/lib/libfmna.a(fmna.c.obj)", "rom": 3521, "ram": 21}, {"name": "zephyr/libzephyr.a(lsm6dsv16x_reg.c.obj)", "rom": 3452, "ram": 0}, {"name": "m.main+fp/hard/libc_nano.a(lib_a-dtoa.o)", "rom": 3438, "ram": 0}, {"name": "ibsubsys__bluetooth__host.a(l2cap.c.obj)", "rom": 3242, "ram": 169}, {"name": "zephyr/libzephyr.a(nvs.c.obj)", "rom": 3288, "ram": 0}, {"name": "app/libapp.a(drv_led.c.obj)", "rom": 2554, "ram": 721}, {"name": "eFiles/zephyr_final.dir/isr_tables.c.obj", "rom": 1084, "ram": 2168}, {"name": "lib_findmy/lib/libfmna.a(fmna_adv.c.obj)", "rom": 3207, "ram": 34}, {"name": "les__hal_nordic__nrfx.a(nrfx_spim.c.obj)", "rom": 3222, "ram": 0}, {"name": "arch__arm__core__cortex_m.a(fault.c.obj)", "rom": 3125, "ram": 0}, {"name": "libsubsys__bluetooth__host.a(keys.c.obj)", "rom": 2722, "ram": 384}, {"name": "_ports__zephyr.a(memfault_metrics.c.obj)", "rom": 2809, "ram": 204}, {"name": "npm13xx_charger.a(npm13xx_charger.c.obj)", "rom": 2988, "ram": 14}, {"name": "les__hal_nordic__nrfx.a(nrfx_grtc.c.obj)", "rom": 2858, "ram": 144}, {"name": "ules__hal_nordic__nrfx.a(nrfx_pwm.c.obj)", "rom": 2940, "ram": 0}, {"name": "app/libapp.a(app_state.c.obj)", "rom": 2841, "ram": 28}, {"name": "zephyr/libzephyr.a(mds.c.obj)", "rom": 2599, "ram": 148}, {"name": "etooth__controller.a(hci_internal.c.obj)", "rom": 2622, "ram": 76}, {"name": "gpio/libdrivers__gpio.a(gpio_nrfx.c.obj)", "rom": 2307, "ram": 378}, {"name": "_ports__zephyr.a(memfault_logging.c.obj)", "rom": 470, "ram": 2204}, {"name": "racen_psa_driver.a(key_management.c.obj)", "rom": 2667, "ram": 0}, {"name": "app/libapp.a(ble_protocol.c.obj)", "rom": 2079, "ram": 544}, {"name": "liboberon_3.0.17.a(ocrypto_sha256.c.obj)", "rom": 2616, "ram": 0}, {"name": "app/libapp.a(pb_encode.c.obj)", "rom": 2598, "ram": 0}, {"name": "zephyr/libzephyr.a(device_runtime.c.obj)", "rom": 2558, "ram": 0}, {"name": "core.a(psa_crypto_slot_management.c.obj)", "rom": 1120, "ram": 1412}, {"name": "cracen/libcracen_psa_driver.a(kmu.c.obj)", "rom": 2532, "ram": 0}, {"name": "subsys__bluetooth__host.a(long_wq.c.obj)", "rom": 93, "ram": 2416}, {"name": "findmy/lib/libfmna.a(fmna_storage.c.obj)", "rom": 2502, "ram": 0}, {"name": "zephyr/libzephyr.a(mpsc_pbuf.c.obj)", "rom": 2482, "ram": 0}, {"name": "my/lib/libfmna.a(fm_crypto_oberon.c.obj)", "rom": 2438, "ram": 0}, {"name": "zephyr/libzephyr.a(onoff.c.obj)", "rom": 2435, "ram": 0}, {"name": "vers__regulator.a(regulator_fixed.c.obj)", "rom": 2320, "ram": 52}, {"name": "rs/pwm/libdrivers__pwm.a(pwm_nrfx.c.obj)", "rom": 2058, "ram": 308}, {"name": "_mgmt__mcumgr__transport.a(smp_bt.c.obj)", "rom": 1971, "ram": 389}, {"name": "zephyr/libzephyr.a(heap.c.obj)", "rom": 2359, "ram": 0}, {"name": "f__subsys__mpsl__init.a(mpsl_init.c.obj)", "rom": 877, "ram": 1452}, {"name": "/libsubsys__bluetooth__host.a(ecc.c.obj)", "rom": 1995, "ram": 208}, {"name": "clock_control.a(clock_control_nrf.c.obj)", "rom": 2068, "ram": 114}, {"name": "c/libdrivers__i2c.a(i2c_nrfx_twim.c.obj)", "rom": 1297, "ram": 844}, {"name": "b/libfmna.a(fmna_motion_detection.c.obj)", "rom": 1904, "ram": 219}, {"name": "app/libapp.a(factory_nvs.c.obj)", "rom": 2027, "ram": 51}, {"name": "_mcumgr__grp__img_mgmt.a(img_mgmt.c.obj)", "rom": 1935, "ram": 84}, {"name": "libarch__arm__core__mpu.a(arm_mpu.c.obj)", "rom": 1993, "ram": 21}];
+        const sections = [{"name": "text", "size": 527056}, {"name": "noinit", "size": 136786}, {"name": "log_fmt", "size": 127306}, {"name": "rodata", "size": 87440}, {"name": "bss", "size": 79479}, {"name": "hg_log_fmt", "size": 20462}, {"name": "datas", "size": 6046}, {"name": "sw_isr_table", "size": 2168}, {"name": "rom_start", "size": 1148}, {"name": "device_area", "size": 828}, {"name": "log_const_area", "size": 552}, {"name": "initlevel", "size": 368}, {"name": "k_timer_area", "size": 336}, {"name": "k_mutex_area", "size": 280}, {"name": "k_sem_area", "size": 96}, {"name": "k_fifo_area", "size": 84}, {"name": "device_states", "size": 48}, {"name": "k_event_area", "size": 32}, {"name": "k_heap_area", "size": 24}, {"name": "ramfunc", "size": 8}, {"name": "last_section", "size": 4}];
+        const totalRom = 643904;
+        const totalRam = 225387;
+        const statsCode = 549866;
+        const statsRo = 87992;
+        const statsRw = 6046;
+        const statsZi = 219341;
+        const totalMem = 869291;
+
+        let currentSortColumn = {};
+        let currentSortAsc = {};
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.container').forEach(function(el) {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-links button').forEach(function(el) {
+                el.classList.remove('active');
+            });
+
+            const pages = { 'home': 'home-page', 'doc': 'doc-page', 'advanced': 'advanced-page' };
+            const targetPage = document.getElementById(pages[pageId]);
+            targetPage.style.display = 'block';
+            setTimeout(function() { targetPage.classList.add('active'); }, 10);
+
+            const btnIndex = { 'home': 0, 'doc': 1, 'advanced': 2 };
+            document.querySelectorAll('.nav-links button')[btnIndex[pageId]].classList.add('active');
+        }
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            ['rom', 'ram', 'modules', 'sections'].forEach(function(t) {
+                document.getElementById(t + '-table-container').style.display = 'none';
+            });
+
+            const tabMap = { 'rom': 0, 'ram': 1, 'modules': 2, 'sections': 3 };
+            document.querySelectorAll('.tab-btn')[tabMap[type]].classList.add('active');
+            document.getElementById(type + '-table-container').style.display = 'block';
+        }
+
+        function sortTable(tableId, colIndex) {
+            const key = tableId + '-' + colIndex;
+            const asc = currentSortColumn[key] !== colIndex || !currentSortAsc[key];
+            currentSortColumn[key] = colIndex;
+            currentSortAsc[key] = asc;
+
+            const tbody = document.getElementById(tableId.replace('table', 'table-body'));
+            if (!tbody) return;
+
+            const rows = Array.from(tbody.rows);
+            rows.sort(function(a, b) {
+                const aVal = a.cells[colIndex].textContent.trim();
+                const bVal = b.cells[colIndex].textContent.trim();
+                const aNum = parseFloat(aVal);
+                const bNum = parseFloat(bVal);
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return asc ? aNum - bNum : bNum - aNum;
+                }
+                return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+            });
+
+            rows.forEach(function(row) { tbody.appendChild(row); });
+        }
+
+        function filterTable() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const activeTab = document.querySelector('.tab-btn.active');
+            if (!activeTab) return;
+
+            const tabText = activeTab.textContent;
+            let tableId;
+            if (tabText.indexOf('ROM') >= 0) tableId = 'rom-table-body';
+            else if (tabText.indexOf('RAM') >= 0) tableId = 'ram-table-body';
+            else if (tabText.indexOf('模块') >= 0) tableId = 'modules-table-body';
+            else if (tabText.indexOf('段') >= 0) tableId = 'sections-table-body';
+
+            const tbody = document.getElementById(tableId);
+            if (!tbody) return;
+
+            Array.from(tbody.rows).forEach(function(row) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.indexOf(searchText) >= 0 ? '' : 'none';
+            });
+        }
+
+        function renderTables() {
+            const romBody = document.getElementById('rom-table-body');
+            const ramBody = document.getElementById('ram-table-body');
+            const modBody = document.getElementById('modules-table-body');
+            const secBody = document.getElementById('sections-table-body');
+
+            romSymbols.forEach(function(s) {
+                const row = romBody.insertRow();
+                row.innerHTML = '<td><code>' + s.name + '</code></td><td>' + s.size + '</td><td>.' + s.section + '</td><td>' + s.object + '</td>';
+            });
+
+            ramSymbols.forEach(function(s) {
+                const row = ramBody.insertRow();
+                row.innerHTML = '<td><code>' + s.name + '</code></td><td>' + s.size + '</td><td>.' + s.section + '</td><td>' + s.object + '</td>';
+            });
+
+            modules.forEach(function(m) {
+                const row = modBody.insertRow();
+                row.innerHTML = '<td>' + m.name + '</td><td>' + m.rom + '</td><td>' + m.ram + '</td>';
+            });
+
+            sections.forEach(function(s) {
+                const row = secBody.insertRow();
+                row.innerHTML = '<td><code>.' + s.name + '</code></td><td>' + s.size + '</td>';
+            });
+        }
+
+        function renderMemoryChart() {
+            const canvas = document.getElementById('memoryChart');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 150;
+
+            const chartData = [
+                { label: 'Code', value: statsCode, color: '#e74c3c' },
+                { label: 'RO Data', value: statsRo, color: '#3498db' },
+                { label: 'RW Data', value: statsRw, color: '#2ecc71' },
+                { label: 'ZI Data', value: statsZi, color: '#f39c12' }
+            ];
+
+            const total = chartData.reduce(function(sum, d) { return sum + d.value; }, 0);
+            let startAngle = -Math.PI / 2;
+
+            chartData.forEach(function(d) {
+                const sliceAngle = (d.value / total) * 2 * Math.PI;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fillStyle = d.color;
+                ctx.fill();
+                startAngle += sliceAngle;
+            });
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 0.5, 0, 2 * Math.PI);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('内存分布', centerX, centerY - 10);
+            ctx.font = '14px Arial';
+            ctx.fillText(formatBytes(totalMem), centerX, centerY + 15);
+
+            const legend = document.getElementById('chart-legend');
+            chartData.forEach(function(d) {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = '<div class="legend-color" style="background: ' + d.color + '"></div><div class="legend-text">' + d.label + ' (' + formatBytes(d.value) + ')</div>';
+                legend.appendChild(item);
+            });
+        }
+
+        function formatBytes(bytes) {
+            if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            if (bytes >= 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return bytes + ' B';
+        }
+
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTables();
+            renderMemoryChart();
+        });
+    </script>
+</body>
+</html>
